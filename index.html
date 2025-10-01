@@ -13,47 +13,43 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-image: url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-33-44.jpg'); /* Main background */
-            background-size: contain; /* Maintains original quality */
+            background-image: url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-33-44.jpg');
+            background-size: contain; /* Clear quality */
             background-position: center;
             background-repeat: no-repeat;
-            background-color: #1a1a2e; /* Dark base color */
-            position: relative; /* For overlay positioning */
-            color: #333;
+            background-color: #1a1a2e;
+            position: relative;
+            /* Optional: Uncomment for more vibrancy */
+            /* filter: brightness(110%) contrast(110%); */
         }
-
-        /* Overlay image in right corner */
         body::before {
             content: '';
             position: absolute;
-            top: 10px;
+            bottom: 10px; /* Lower right corner */
             right: 10px;
-            width: 150px; /* Adjustable size */
+            width: 150px;
             height: auto;
-            background-image: url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-47-43.jpg'); /* Second photo */
+            background-image: url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-47-43.jpg');
             background-size: contain;
             background-repeat: no-repeat;
-            opacity: 0.7; /* Adjustable transparency */
-            z-index: 1; /* Above background but below container */
+            opacity: 0.7;
+            z-index: 1;
         }
-
         .container {
-            background-color: rgba(255, 255, 255, 0.85); /* Adjusted for visibility */
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
             max-width: 600px;
             width: 90%;
             text-align: center;
-            position: relative; /* Ensure container is above overlay */
-            z-index: 2; /* Above the overlay */
+            position: relative;
+            z-index: 2;
         }
-
         h1 {
             color: #333;
             margin-bottom: 20px;
         }
-
         #startBtn {
             background-color: #4CAF50;
             color: white;
@@ -64,21 +60,17 @@
             cursor: pointer;
             margin-top: 20px;
         }
-
         #startBtn:hover {
             background-color: #45a049;
         }
-
         #quiz {
             display: none;
         }
-
         #question {
             font-size: 1.2em;
             margin-bottom: 20px;
             font-weight: bold;
         }
-
         .option {
             background-color: #f0f8ff;
             padding: 15px;
@@ -89,16 +81,13 @@
             transition: background-color 0.3s;
             font-size: 16px;
         }
-
         .option:hover {
             background-color: #e6f3ff;
         }
-
         .option.selected {
             background-color: white !important;
             border-color: #4CAF50;
         }
-
         #nextBtn {
             background-color: #2196F3;
             color: white;
@@ -107,59 +96,50 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            margin: 20px auto; /* Center the Next button */
+            margin: 20px auto;
             display: none;
         }
-
         #nextBtn:hover {
             background-color: #1976D2;
         }
-
         #result {
             margin-top: 20px;
             font-weight: bold;
             font-size: 18px;
         }
-
         #finalScore {
             display: none;
             font-size: 24px;
             color: #4CAF50;
         }
-
         #answersReview {
             text-align: left;
             margin-top: 20px;
             font-size: 14px;
         }
-
         .question-text {
             color: #000;
             font-weight: bold;
         }
-
         .correct-answer {
             color: #000;
             font-weight: normal;
         }
-
         #restartBtn {
             background-color: #4CAF50;
             color: white;
-            padding: 20px 50px; /* Larger size */
-            font-size: 22px; /* Bigger font */
+            padding: 20px 50px;
+            font-size: 22px;
             border: none;
             border-radius: 8px;
             cursor: pointer;
             margin-top: 30px;
         }
-
         #restartBtn:hover {
             background-color: #45a049;
         }
-
         #answersReview li {
-            margin-bottom: 15px; /* Gap between question-answer pairs */
+            margin-bottom: 15px;
         }
     </style>
 </head>
