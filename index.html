@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raiku Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-33-44.jpg'); /* Main background */
+            background-size: contain; /* Maintains original quality */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #1a1a2e; /* Dark base color */
+            position: relative; /* For overlay positioning */
+            color: #333;
+        }
+
+        /* Overlay image in right corner */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 150px; /* Adjustable size */
+            height: auto;
+            background-image: url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-47-43.jpg'); /* Second photo */
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.7; /* Adjustable transparency */
+            z-index: 1; /* Above background but below container */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.85); /* Adjusted for visibility */
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            position: relative; /* Ensure container is above overlay */
+            z-index: 2; /* Above the overlay */
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        #startBtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        #startBtn:hover {
+            background-color: #45a049;
+        }
+
+        #quiz {
+            display: none;
+        }
+
+        #question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .option {
+            background-color: #f0f8ff;
+            padding: 15px;
+            margin: 10px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+
+        .option:hover {
+            background-color: #e6f3ff;
+        }
+
+        .option.selected {
+            background-color: white !important;
+            border-color: #4CAF50;
+        }
+
+        #nextBtn {
+            background-color: #2196F3;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px auto; /* Center the Next button */
+            display: none;
+        }
+
+        #nextBtn:hover {
+            background-color: #1976D2;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        #finalScore {
+            display: none;
+            font-size: 24px;
+            color: #4CAF50;
+        }
+
+        #answersReview {
+            text-align: left;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .question-text {
+            color: #000;
+            font-weight: bold;
+        }
+
+        .correct-answer {
+            color: #000;
+            font-weight: normal;
+        }
+
+        #restartBtn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px 50px; /* Larger size */
+            font-size: 22px; /* Bigger font */
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 30px;
+        }
+
+        #restartBtn:hover {
+            background-color: #45a049;
+        }
+
+        #answersReview li {
+            margin-bottom: 15px; /* Gap between question-answer pairs */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Raiku Quiz</h1>
+        <p>Test your knowledge about the Raiku project!</p>
+        <button id="startBtn" onclick="startQuiz()">Start Quiz</button>
+
+        <div id="quiz">
+            <h2 id="question"></h2>
+            <div id="options"></div>
+            <div id="result"></div>
+            <button id="nextBtn" onclick="nextQuestion()">Next</button>
+        </div>
+
+        <div id="finalScore">
+            <h2>Quiz Complete! 🎉🏆</h2>
+            <p>Your Score: <span id="scoreDisplay"></span>/7</p>
+            <div id="answersReview"></div>
+            <button id="restartBtn" onclick="restartQuiz()">Restart Quiz</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What is the primary goal of the Raiku project?",
+                options: ["To create a new cryptocurrency token", "To enhance Solana infrastructure for enterprise-grade reliability", "To develop mobile apps for blockchain gaming", "To build a decentralized social media platform"],
+                answer: "To enhance Solana infrastructure for enterprise-grade reliability"
+            },
+            {
+                question: "Which feature of Raiku guarantees predictable outcomes for transactions?",
+                options: ["Low-Latency Performance", "Deterministic Execution", "Fair Blockspace Marketplace", "Advanced Scheduling Engine"],
+                answer: "Deterministic Execution"
+            },
+            {
+                question: "What does Raiku's blockspace marketplace primarily transform blockspace into?",
+                options: ["A free public resource", "A guaranteed, programmable resource", "A high-risk gambling tool", "An offline storage solution"],
+                answer: "A guaranteed, programmable resource"
+            },
+            {
+                question: "Which component allows Solana validators to sell tailored blockspace directly to builders?",
+                options: ["Raiku Core Engine", "Firedancer Client", "Raiku Sidecar", "Agave Marketplace"],
+                answer: "Raiku Sidecar"
+            },
+            {
+                question: "How does Raiku ensure low-latency performance for high-frequency transactions?",
+                options: ["By using external cloud servers", "By placing high-performance compute where transactions occur", "By slowing down the blockchain", "By limiting transaction volume"],
+                answer: "By placing high-performance compute where transactions occur"
+            },
+            {
+                question: "What is the maximum time ahead that users can pre-book blockspace with Raiku?",
+                options: ["10 seconds", "30 seconds", "60 seconds", "5 minutes"],
+                answer: "60 seconds"
+            },
+            {
+                question: "Which clients does Raiku integrate seamlessly with for block building?",
+                options: ["Ethereum and Bitcoin clients", "Anza (Agave) and Firedancer clients", "Hyperledger and Corda", "Polkadot and Cosmos SDK"],
+                answer: "Anza (Agave) and Firedancer clients"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userAnswers = [];
+
+        function startQuiz() {
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('quiz').style.display = 'block';
+            document.getElementById('finalScore').style.display = 'none';
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = quizData[currentQuestion];
+            document.getElementById('question').innerText = `${currentQuestion + 1}. ${q.question}`;
+            const optionsDiv = document.getElementById('options');
+            optionsDiv.innerHTML = '';
+            q.options.forEach((option) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.innerText = option;
+                div.onclick = () => selectOption(div, option);
+                optionsDiv.appendChild(div);
+            });
+            document.getElementById('result').innerText = '';
+            document.getElementById('nextBtn').style.display = 'none';
+        }
+
+        function selectOption(selectedDiv, selectedOption) {
+            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            selectedDiv.classList.add('selected');
+            const q = quizData[currentQuestion];
+            if (selectedOption === q.answer) {
+                score++;
+                document.getElementById('result').innerText = 'Correct! ✅';
+                document.getElementById('result').style.color = '#4CAF50';
+            } else {
+                document.getElementById('result').innerText = `Wrong! Correct answer: ${q.answer}`;
+                document.getElementById('result').style.color = '#f44336';
+            }
+            userAnswers[currentQuestion] = selectedOption;
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestion++;
+            if (currentQuestion < quizData.length) {
+                loadQuestion();
+            } else {
+                showFinalScore();
+            }
+        }
+
+        function showFinalScore() {
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('finalScore').style.display = 'block';
+            document.getElementById('scoreDisplay').innerText = score;
+            let reviewHtml = '<h3>Questions and Correct Answers:</h3><ul>';
+            quizData.forEach((q, index) => {
+                reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span><br>Correct Answer: <span class="correct-answer">${q.answer}</span><br></li>`;
+            });
+            reviewHtml += '</ul>';
+            document.getElementById('answersReview').innerHTML = reviewHtml;
+        }
+
+        function restartQuiz() {
+            document.getElementById('finalScore').style.display = 'none';
+            document.getElementById('startBtn').style.display = 'block';
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = [];
+        }
+    </script>
+</body>
+</html>
