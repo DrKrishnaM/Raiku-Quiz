@@ -22,21 +22,6 @@
             /* Optional: Uncomment for more vibrancy */
             /* filter: brightness(110%) contrast(110%); */
         }
-        #motivationalQuote {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 14px;
-            color: #fff; /* Changed to bold white */
-            font-weight: bold; /* Already bold, kept as is */
-            max-width: 200px;
-            text-align: right;
-            background-color: rgba(0, 0, 0, 0.6); /* Dark background for contrast with white */
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 1; /* Above background, below container */
-            line-height: 1.3;
-        }
         .container {
             background-color: rgba(255, 255, 255, 0.85);
             padding: 30px;
@@ -46,7 +31,7 @@
             width: 90%;
             text-align: center;
             position: relative;
-            z-index: 2; /* Above motivational quote */
+            z-index: 2;
         }
         h1 {
             color: #333;
@@ -115,6 +100,27 @@
             color: #4CAF50;
             position: relative;
         }
+        #nextPage {
+            display: none;
+            background-color: rgba(255, 255, 255, 0.85);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        #motivationalQuote {
+            font-size: 18px;
+            color: #fff;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.6);
+            border-radius: 5px;
+        }
         #answersReview {
             text-align: left;
             margin-top: 20px;
@@ -136,7 +142,7 @@
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            margin-top: 30px;
+            margin-top: 20px;
         }
         #restartBtn:hover {
             background-color: #45a049;
@@ -147,7 +153,6 @@
     </style>
 </head>
 <body>
-    <div id="motivationalQuote"></div>
     <div class="container">
         <h1>Welcome to Raiku Quiz</h1>
         <p>Test your knowledge about the Raiku project!</p>
@@ -164,6 +169,11 @@
             <h2>Quiz Complete! 🎉🏆</h2>
             <p>Your Score: <span id="scoreDisplay"></span>/7</p>
             <div id="answersReview"></div>
+            <button id="nextButton" onclick="showNextPage()">Next</button> <!-- Changed to Next button -->
+        </div>
+
+        <div id="nextPage">
+            <div id="motivationalQuote"></div>
             <button id="restartBtn" onclick="restartQuiz()">Restart Quiz</button>
         </div>
     </div>
@@ -226,11 +236,11 @@
             document.getElementById('startBtn').style.display = 'none';
             document.getElementById('quiz').style.display = 'block';
             document.getElementById('finalScore').style.display = 'none';
+            document.getElementById('nextPage').style.display = 'none';
             currentQuestion = 0;
             score = 0;
             userAnswers = [];
             loadQuestion();
-            document.getElementById('motivationalQuote').innerText = ''; // Clear quote on start
         }
 
         function loadQuestion() {
@@ -277,6 +287,7 @@
         function showFinalScore() {
             document.getElementById('quiz').style.display = 'none';
             document.getElementById('finalScore').style.display = 'block';
+            document.getElementById('nextPage').style.display = 'none';
             document.getElementById('scoreDisplay').innerText = score;
             let reviewHtml = '<h3>Questions and Correct Answers:</h3><ul>';
             quizData.forEach((q, index) => {
@@ -284,18 +295,22 @@
             });
             reviewHtml += '</ul>';
             document.getElementById('answersReview').innerHTML = reviewHtml;
-            // Generate random motivational quote
+        }
+
+        function showNextPage() {
+            document.getElementById('finalScore').style.display = 'none';
+            document.getElementById('nextPage').style.display = 'block';
             const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
             document.getElementById('motivationalQuote').innerText = randomQuote;
         }
 
         function restartQuiz() {
             document.getElementById('finalScore').style.display = 'none';
+            document.getElementById('nextPage').style.display = 'none';
             document.getElementById('startBtn').style.display = 'block';
             currentQuestion = 0;
             score = 0;
             userAnswers = [];
-            document.getElementById('motivationalQuote').innerText = ''; // Clear quote on restart
         }
     </script>
 </body>
