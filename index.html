@@ -22,6 +22,18 @@
             /* Optional: Uncomment for more vibrancy */
             /* filter: brightness(110%) contrast(110%); */
         }
+        #visitorCount {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #000; /* Changed to black */
+            font-size: 14px;
+            font-weight: bold; /* Already bold, kept as is */
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 3;
+        }
         .container {
             background-color: rgba(255, 255, 255, 0.85);
             padding: 30px;
@@ -172,6 +184,7 @@
     </style>
 </head>
 <body>
+    <div id="visitorCount"></div> <!-- Added visitor count -->
     <div class="container">
         <h1>Welcome to Raiku Quiz</h1>
         <p>Test your knowledge about the Raiku project!</p>
@@ -198,6 +211,12 @@
     </div>
 
     <script>
+        // Visitor Counter Logic
+        let visitorCount = localStorage.getItem('visitorCount') ? parseInt(localStorage.getItem('visitorCount')) : 0;
+        visitorCount++; // Increment on each visit
+        localStorage.setItem('visitorCount', visitorCount);
+        document.getElementById('visitorCount').innerText = `No. of Visitors: ${visitorCount}`;
+
         const quizData = [
             {
                 question: "What is the primary goal of the Raiku project?",
