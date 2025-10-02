@@ -14,8 +14,8 @@
             align-items: center;
             min-height: 100vh;
             background-image: url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-47-43.jpg'), url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-47-43.jpg');
-            background-size: contain; /* Each image retains its size */
-            background-position: left center, right center; /* Side by side */
+            background-size: contain;
+            background-position: left center, right center;
             background-repeat: no-repeat, no-repeat;
             background-color: #1a1a2e;
             position: relative;
@@ -98,6 +98,19 @@
             display: none;
             font-size: 24px;
             color: #4CAF50;
+            position: relative;
+        }
+        #motivationalQuote {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
+            color: #333;
+            max-width: 200px;
+            text-align: right;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 5px;
         }
         #answersReview {
             text-align: left;
@@ -147,6 +160,7 @@
             <h2>Quiz Complete! 🎉🏆</h2>
             <p>Your Score: <span id="scoreDisplay"></span>/7</p>
             <div id="answersReview"></div>
+            <div id="motivationalQuote"></div>
             <button id="restartBtn" onclick="restartQuiz()">Restart Quiz</button>
         </div>
     </div>
@@ -188,6 +202,17 @@
                 options: ["Ethereum and Bitcoin clients", "Anza (Agave) and Firedancer clients", "Hyperledger and Corda", "Polkadot and Cosmos SDK"],
                 answer: "Anza (Agave) and Firedancer clients"
             }
+        ];
+
+        const motivationalQuotes = [
+            "Success is not final, failure is not fatal: It is the courage to continue that counts. – Winston Churchill",
+            "The only way to do great work is to love what you do. – Steve Jobs",
+            "Believe you can and you're halfway there. – Theodore Roosevelt",
+            "Hardships often prepare ordinary people for an extraordinary destiny. – C.S. Lewis",
+            "The best way to predict the future is to create it. – Peter Drucker",
+            "You are never too old to set another goal or to dream a new dream. – C.S. Lewis",
+            "It does not matter how slowly you go as long as you do not stop. – Confucius",
+            "The future belongs to those who believe in the beauty of their dreams. – Eleanor Roosevelt"
         ];
 
         let currentQuestion = 0;
@@ -255,6 +280,9 @@
             });
             reviewHtml += '</ul>';
             document.getElementById('answersReview').innerHTML = reviewHtml;
+            // Generate random motivational quote
+            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+            document.getElementById('motivationalQuote').innerText = randomQuote;
         }
 
         function restartQuiz() {
@@ -266,4 +294,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
