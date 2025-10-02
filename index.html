@@ -22,6 +22,18 @@
             /* Optional: Uncomment for more vibrancy */
             /* filter: brightness(110%) contrast(110%); */
         }
+        #visitorCount {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 5px 10px;
+            border-radius: 5px;
+            z-index: 3;
+        }
         .container {
             background-color: rgba(255, 255, 255, 0.85);
             padding: 30px;
@@ -172,6 +184,7 @@
     </style>
 </head>
 <body>
+    <div id="visitorCount"></div> <!-- Visitor count -->
     <div class="container">
         <h1>Welcome to Raiku Quiz</h1>
         <p>Test your knowledge about the Raiku project!</p>
@@ -192,12 +205,19 @@
         <div id="finalScore">
             <h2>Quiz Complete! 🎉🏆</h2>
             <p>Your Score: <span id="scoreDisplay"></span>/7</p>
+            <p>Total XP: <span id="xpDisplay"></span></p> <!-- Added XP display -->
             <div id="answersReview"></div>
             <button id="restartBtn" onclick="restartQuiz()">Restart Quiz</button>
         </div>
     </div>
 
     <script>
+        // Visitor Counter Logic
+        let visitorCount = localStorage.getItem('visitorCount') ? parseInt(localStorage.getItem('visitorCount')) : 0;
+        visitorCount++;
+        localStorage.setItem('visitorCount', visitorCount);
+        document.getElementById('visitorCount').innerText = `No. of Visitors: ${visitorCount}`;
+
         const quizData = [
             {
                 question: "What is the primary goal of the Raiku project?",
@@ -249,6 +269,7 @@
 
         let currentQuestion = 0;
         let score = 0;
+        let xp = 0; // Added XP variable
         let userAnswers = [];
 
         function startQuiz() {
@@ -266,6 +287,7 @@
             document.getElementById('finalScore').style.display = 'none';
             currentQuestion = 0;
             score = 0;
+            xp = 0; // Reset XP
             userAnswers = [];
             loadQuestion();
         }
@@ -292,7 +314,8 @@
             const q = quizData[currentQuestion];
             if (selectedOption === q.answer) {
                 score++;
-                document.getElementById('result').innerText = 'Correct! ✅';
+                xp += 10; // Add 10 XP for correct answer
+                document.getElementById('result').innerText = 'Correct! ✅ +10 XP';
                 document.getElementById('result').style.color = '#4CAF50';
             } else {
                 document.getElementById('result').innerText = `Wrong! Correct answer: ${q.answer}`;
@@ -315,6 +338,7 @@
             document.getElementById('quiz').style.display = 'none';
             document.getElementById('finalScore').style.display = 'block';
             document.getElementById('scoreDisplay').innerText = score;
+            document.getElementById('xpDisplay').innerText = xp; // Display total XP
             let reviewHtml = '<h3>Questions and Correct Answers:</h3><ul>';
             quizData.forEach((q, index) => {
                 reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span><br>Correct Answer: <span class="correct-answer">${q.answer}</span><br></li>`;
@@ -328,6 +352,7 @@
             document.getElementById('startBtn').style.display = 'block';
             currentQuestion = 0;
             score = 0;
+            xp = 0; // Reset XP on restart
             userAnswers = [];
         }
     </script>
