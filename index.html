@@ -100,6 +100,25 @@
             color: #4CAF50;
             position: relative;
         }
+        #finalScore p {
+            color: #000; /* Black color */
+            font-weight: bold; /* Bold font */
+            font-size: 20px; /* Larger size */
+            margin: 10px 0;
+        }
+        #nextButton {
+            background-color: #2196F3; /* Matched with #nextBtn */
+            color: white;
+            padding: 10px 20px; /* Same padding as #nextBtn */
+            font-size: 16px; /* Same font size as #nextBtn */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 20px auto; /* Same margin as #nextBtn */
+        }
+        #nextButton:hover {
+            background-color: #1976D2; /* Same hover effect as #nextBtn */
+        }
         #nextPage {
             display: none;
             background-color: rgba(255, 255, 255, 0.85);
@@ -169,7 +188,7 @@
             <h2>Quiz Complete! 🎉🏆</h2>
             <p>Your Score: <span id="scoreDisplay"></span>/7</p>
             <div id="answersReview"></div>
-            <button id="nextButton" onclick="showNextPage()">Next</button> <!-- Changed to Next button -->
+            <button id="nextButton" onclick="showNextPage()">Next</button>
         </div>
 
         <div id="nextPage">
@@ -314,4 +333,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
