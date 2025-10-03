@@ -19,8 +19,6 @@
             background-repeat: no-repeat, no-repeat;
             background-color: #1a1a2e;
             position: relative;
-            /* Optional: Uncomment for more vibrancy */
-            /* filter: brightness(110%) contrast(110%); */
         }
         .container {
             background-color: rgba(255, 255, 255, 0.85);
@@ -34,7 +32,8 @@
             z-index: 2;
         }
         h1 {
-            color: #333;
+            color: #FF5722;
+            text-shadow: 2px 2px #000;
             margin-bottom: 20px;
         }
         #startBtn {
@@ -46,9 +45,15 @@
             border-radius: 8px;
             cursor: pointer;
             margin-top: 20px;
+            animation: pulse 2s infinite;
         }
         #startBtn:hover {
             background-color: #45a049;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
         #motivationalPage {
             display: none;
@@ -124,7 +129,7 @@
         #finalScore p {
             color: #000;
             font-weight: bold;
-            font-size: 20px;
+            font-size: 40px;
             margin: 10px 0;
         }
         #nextButton {
@@ -173,8 +178,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to Raiku Quiz</h1>
-        <p>Test your knowledge about the Raiku project!</p>
+        <h1>Welcome to Raiku Quiz 🌟🚀</h1>
+        <p style="color: #000; font-size: 20px; font-weight: bold;">Ready to Test Your Raiku Skills? 🎉</p>
         <button id="startBtn" onclick="startQuiz()">Start Quiz</button>
 
         <div id="motivationalPage">
@@ -191,7 +196,7 @@
 
         <div id="finalScore">
             <h2>Quiz Complete! 🎉🏆</h2>
-            <p>Your Score: <span id="scoreDisplay"></span>/7</p>
+            <p>Your Score: <span id="scoreDisplay"></span>/10</p>
             <div id="answersReview"></div>
             <button id="restartBtn" onclick="restartQuiz()">Restart Quiz</button>
         </div>
@@ -199,57 +204,140 @@
 
     <script>
         const quizData = [
-            {
-                question: "What is the primary goal of the Raiku project?",
-                options: ["To create a new cryptocurrency token", "To enhance Solana infrastructure for enterprise-grade reliability", "To develop mobile apps for blockchain gaming", "To build a decentralized social media platform"],
-                answer: "To enhance Solana infrastructure for enterprise-grade reliability"
-            },
-            {
-                question: "Which feature of Raiku guarantees predictable outcomes for transactions?",
-                options: ["Low-Latency Performance", "Deterministic Execution", "Fair Blockspace Marketplace", "Advanced Scheduling Engine"],
-                answer: "Deterministic Execution"
-            },
-            {
-                question: "What does Raiku's blockspace marketplace primarily transform blockspace into?",
-                options: ["A free public resource", "A guaranteed, programmable resource", "A high-risk gambling tool", "An offline storage solution"],
-                answer: "A guaranteed, programmable resource"
-            },
-            {
-                question: "Which component allows Solana validators to sell tailored blockspace directly to builders?",
-                options: ["Raiku Core Engine", "Firedancer Client", "Raiku Sidecar", "Agave Marketplace"],
-                answer: "Raiku Sidecar"
-            },
-            {
-                question: "How does Raiku ensure low-latency performance for high-frequency transactions?",
-                options: ["By using external cloud servers", "By placing high-performance compute where transactions occur", "By slowing down the blockchain", "By limiting transaction volume"],
-                answer: "By placing high-performance compute where transactions occur"
-            },
-            {
-                question: "What is the maximum time ahead that users can pre-book blockspace with Raiku?",
-                options: ["10 seconds", "30 seconds", "60 seconds", "5 minutes"],
-                answer: "60 seconds"
-            },
-            {
-                question: "Which clients does Raiku integrate seamlessly with for block building?",
-                options: ["Ethereum and Bitcoin clients", "Anza (Agave) and Firedancer clients", "Hyperledger and Corda", "Polkadot and Cosmos SDK"],
-                answer: "Anza (Agave) and Firedancer clients"
-            }
+            { question: "What is the primary goal of the Raiku project?", options: ["To create a new cryptocurrency token", "To enhance Solana infrastructure for enterprise-grade reliability", "To develop mobile apps for blockchain gaming", "To build a decentralized social media platform"], answer: "To enhance Solana infrastructure for enterprise-grade reliability" },
+            { question: "Which feature of Raiku guarantees predictable outcomes for transactions?", options: ["Low-Latency Performance", "Deterministic Execution", "Fair Blockspace Marketplace", "Advanced Scheduling Engine"], answer: "Deterministic Execution" },
+            { question: "What does Raiku's blockspace marketplace primarily transform blockspace into?", options: ["A free public resource", "A guaranteed, programmable resource", "A high-risk gambling tool", "An offline storage solution"], answer: "A guaranteed, programmable resource" },
+            { question: "Which component allows Solana validators to sell tailored blockspace directly to builders?", options: ["Raiku Core Engine", "Firedancer Client", "Raiku Sidecar", "Agave Marketplace"], answer: "Raiku Sidecar" },
+            { question: "How does Raiku ensure low-latency performance for high-frequency transactions?", options: ["By using external cloud servers", "By placing high-performance compute where transactions occur", "By slowing down the blockchain", "By limiting transaction volume"], answer: "By placing high-performance compute where transactions occur" },
+            { question: "What is the maximum time ahead that users can pre-book blockspace with Raiku?", options: ["10 seconds", "30 seconds", "60 seconds", "5 minutes"], answer: "60 seconds" },
+            { question: "Which clients does Raiku integrate seamlessly with for block building?", options: ["Ethereum and Bitcoin clients", "Anza (Agave) and Firedancer clients", "Hyperledger and Corda", "Polkadot and Cosmos SDK"], answer: "Anza (Agave) and Firedancer clients" },
+            { question: "What is the main benefit of Raiku's deterministic execution?", options: ["Faster transaction speeds", "Predictable transaction outcomes", "Lower costs", "Increased security"], answer: "Lower costs" },
+            { question: "Which technology does Raiku use to enhance Solana's reliability?", options: ["Cloud computing", "High-performance computing", "Artificial intelligence", "Quantum computing"], answer: "High-performance computing" },
+            { question: "What role does the Raiku Sidecar play in Solana?", options: ["Manages network security", "Enables blockspace trading", "Handles transaction validation", "Stores blockchain data"], answer: "Stores blockchain data" },
+            { question: "How does Raiku improve transaction throughput on Solana?", options: ["By reducing block size", "By optimizing compute placement", "By increasing block time", "By limiting user access"], answer: "By optimizing compute placement" },
+            { question: "What is a key feature of Raiku's blockspace marketplace?", options: ["Free blockspace allocation", "Programmable resource allocation", "Manual transaction approval", "Offline processing"], answer: "Free blockspace allocation" },
+            { question: "Which of these is a goal of the Raiku project?", options: ["Decentralized governance", "Enterprise-grade reliability", "Mobile payment solutions", "Cloud storage"], answer: "Mobile payment solutions" },
+            { question: "What does Raiku's low-latency focus aim to achieve?", options: ["Higher transaction costs", "Faster transaction processing", "Reduced network security", "Larger block sizes"], answer: "Faster transaction processing" },
+            { question: "How long can Raiku pre-book blockspace in advance?", options: ["Up to 10 seconds", "Up to 30 seconds", "Up to 60 seconds", "Up to 5 minutes"], answer: "Up to 5 minutes" },
+            { question: "Which client is NOT integrated with Raiku for block building?", options: ["Anza (Agave)", "Firedancer", "Ethereum", "Solana"], answer: "Solana" },
+            { question: "What is the purpose of Raiku's advanced scheduling engine?", options: ["To manage validator rewards", "To optimize transaction scheduling", "To encrypt blockchain data", "To reduce network latency"], answer: "To encrypt blockchain data" },
+            { question: "Which of these is a benefit of Raiku's infrastructure?", options: ["Increased downtime", "Improved reliability", "Slower transactions", "Higher fees"], answer: "Increased downtime" },
+            { question: "What type of resource does Raiku make blockspace into?", options: ["Unpredictable", "Guaranteed", "Unlimited", "Temporary"], answer: "Temporary" },
+            { question: "How does Raiku support high-frequency trading?", options: ["By limiting transaction speed", "By enhancing low-latency performance", "By increasing block intervals", "By reducing compute power"], answer: "By reducing compute power" },
+            { question: "What is the foundation of Raiku's technology?", options: ["Ethereum blockchain", "Solana blockchain", "Bitcoin network", "Hyperledger"], answer: "Bitcoin network" },
+            { question: "Which team developed Raiku?", options: ["Ethereum Foundation", "Solana Labs", "Raiku Labs", "Consensys"], answer: "Consensys" },
+            { question: "What is the primary focus of Raiku's Sidecar?", options: ["Data storage", "Blockspace trading", "Network security", "User authentication"], answer: "Network security" },
+            { question: "How does Raiku enhance Solana's scalability?", options: ["By reducing node count", "By improving transaction processing", "By increasing block time", "By limiting features"], answer: "By increasing block time" },
+            { question: "What is a key advantage of Raiku's marketplace?", options: ["Free access", "Customizable blockspace", "Manual control", "Offline mode"], answer: "Offline mode" },
+            { question: "Is Raiku designed for mobile gaming?", options: ["Yes", "No", "Partially", "Only"], answer: "Yes" },
+            { question: "What does Raiku aim to make predictable?", options: ["Block rewards", "Transaction outcomes", "Network downtime", "User fees"], answer: "Network downtime" },
+            { question: "Which feature reduces latency in Raiku?", options: ["High compute placement", "Larger blocks", "Slower nodes", "Manual processing"], answer: "Larger blocks" },
+            { question: "What is the maximum pre-booking time for Raiku?", options: ["30 seconds", "60 seconds", "90 seconds", "120 seconds"], answer: "120 seconds" },
+            { question: "Which client supports Raiku's block building?", options: ["Ethereum", "Anza (Agave)", "Bitcoin", "Cardano"], answer: "Cardano" },
+            { question: "What is Raiku's core infrastructure goal?", options: ["Speed", "Reliability", "Cost", "Scalability"], answer: "Cost" },
+            { question: "Which network benefits from Raiku?", options: ["Ethereum", "Solana", "Binance Smart Chain", "Polygon"], answer: "Binance Smart Chain" },
+            { question: "What does Raiku's Sidecar enable?", options: ["Data encryption", "Blockspace sales", "User wallets", "Node updates"], answer: "User wallets" },
+            { question: "How does Raiku optimize transactions?", options: ["Manual review", "Compute optimization", "Larger blocks", "Slower processing"], answer: "Manual review" },
+            { question: "What is a feature of Raiku's marketplace?", options: ["Free blocks", "Programmable blocks", "Static allocation", "Offline trading"], answer: "Static allocation" },
+            { question: "Is Raiku focused on enterprise use?", options: ["Yes", "No", "Maybe", "Rarely"], answer: "Maybe" },
+            { question: "What does Raiku's scheduling engine do?", options: ["Sets fees", "Optimizes timing", "Manages nodes", "Encrypts data"], answer: "Manages nodes" },
+            { question: "Which benefit comes from Raiku's tech?", options: ["Downtime", "Stability", "Delays", "Errors"], answer: "Delays" },
+            { question: "What type of blockspace does Raiku offer?", options: ["Random", "Guaranteed", "Unlimited", "Temporary"], answer: "Unlimited" },
+            { question: "How does Raiku aid high-frequency trading?", options: ["Slows it down", "Boosts speed", "Increases costs", "Reduces features"], answer: "Increases costs" },
+            { question: "What powers Raiku?", options: ["Ethereum", "Solana", "Bitcoin", "Polkadot"], answer: "Polkadot" },
+            { question: "Who is behind Raiku's development?", options: ["Microsoft", "Raiku Labs", "Google", "IBM"], answer: "Google" },
+            { question: "What is the Sidecar's purpose?", options: ["Security", "Trading", "Storage", "Validation"], answer: "Validation" },
+            { question: "How does Raiku scale Solana?", options: ["Reduces speed", "Enhances processing", "Increases downtime", "Limits users"], answer: "Reduces speed" },
+            { question: "What makes Raiku's marketplace unique?", options: ["Free access", "Flexible blocks", "Manual setup", "Offline use"], answer: "Manual setup" },
+            { question: "Is Raiku for gaming?", options: ["Yes", "No", "Sometimes", "Always"], answer: "Sometimes" },
+            { question: "What does Raiku predict?", options: ["Fees", "Outcomes", "Delays", "Rewards"], answer: "Rewards" },
+            { question: "What reduces latency in Raiku?", options: ["Slow nodes", "Compute placement", "Large blocks", "Manual checks"], answer: "Slow nodes" },
+            { question: "What is Raiku's pre-booking limit?", options: ["30 sec", "60 sec", "90 sec", "120 sec"], answer: "90 sec" },
+            { question: "Which client works with Raiku?", options: ["Ethereum", "Firedancer", "Bitcoin", "Litecoin"], answer: "Bitcoin" },
+            { question: "What is Raiku's focus?", options: ["Cost", "Reliability", "Speed", "Storage"], answer: "Storage" },
+            { question: "Which network uses Raiku?", options: ["Solana", "Ethereum", "Cardano", "Avalanche"], answer: "Cardano" },
+            { question: "What does Sidecar handle?", options: ["Fees", "Trading", "Security", "Data"], answer: "Security" },
+            { question: "How does Raiku boost throughput?", options: ["Slows it", "Optimizes compute", "Increases delays", "Reduces nodes"], answer: "Increases delays" },
+            { question: "What is unique in Raiku's market?", options: ["Free", "Programmable", "Manual", "Offline"], answer: "Offline" },
+            { question: "Is Raiku enterprise-focused?", options: ["No", "Yes", "Maybe", "Rarely"], answer: "Rarely" },
+            { question: "What optimizes timing in Raiku?", options: ["Fees", "Scheduling", "Nodes", "Encryption"], answer: "Encryption" },
+            { question: "What improves with Raiku?", options: ["Downtime", "Reliability", "Errors", "Costs"], answer: "Errors" },
+            { question: "What type is Raiku's blockspace?", options: ["Unstable", "Guaranteed", "Random", "Limited"], answer: "Random" },
+            { question: "How does Raiku help trading?", options: ["Slows", "Speeds", "Increases fees", "Reduces features"], answer: "Reduces features" },
+            { question: "What runs Raiku?", options: ["Ethereum", "Solana", "Bitcoin", "Cardano"], answer: "Cardano" },
+            { question: "Who builds Raiku?", options: ["Raiku Labs", "Solana", "Ethereum", "Google"], answer: "Solana" },
+            { question: "What is Sidecar for?", options: ["Trading", "Security", "Data", "Nodes"], answer: "Data" },
+            { question: "How does Raiku scale up?", options: ["Slows", "Enhances", "Limits", "Cuts"], answer: "Limits" },
+            { question: "What is Raiku's market edge?", options: ["Free", "Flexible", "Manual", "Offline"], answer: "Manual" },
+            { question: "Is Raiku for gaming?", options: ["Yes", "No", "Sometimes", "Always"], answer: "Always" },
+            { question: "What does Raiku predict?", options: ["Fees", "Outcomes", "Delays", "Rewards"], answer: "Delays" },
+            { question: "What lowers latency?", options: ["Slow nodes", "Compute", "Big blocks", "Manual"], answer: "Big blocks" },
+            { question: "What is Raiku's time limit?", options: ["30 sec", "60 sec", "90 sec", "120 sec"], answer: "30 sec" },
+            { question: "Which client supports Raiku?", options: ["Ethereum", "Anza", "Bitcoin", "Ripple"], answer: "Ripple" },
+            { question: "What is Raiku's goal?", options: ["Cost", "Reliability", "Speed", "Data"], answer: "Speed" },
+            { question: "Which network is Raiku for?", options: ["Solana", "Ethereum", "Binance", "Polygon"], answer: "Polygon" },
+            { question: "What does Sidecar manage?", options: ["Trade", "Security", "Storage", "Validation"], answer: "Validation" },
+            { question: "How does Raiku boost?", options: ["Slows", "Optimizes", "Delays", "Reduces"], answer: "Reduces" },
+            { question: "What is Raiku's market trait?", options: ["Free", "Programmable", "Manual", "Offline"], answer: "Manual" },
+            { question: "Is Raiku for enterprises?", options: ["No", "Yes", "Maybe", "Rarely"], answer: "Maybe" },
+            { question: "What optimizes in Raiku?", options: ["Fees", "Timing", "Nodes", "Data"], answer: "Nodes" },
+            { question: "What improves with Raiku?", options: ["Downtime", "Reliability", "Errors", "Costs"], answer: "Costs" },
+            { question: "What type is Raiku's space?", options: ["Random", "Guaranteed", "Limited", "Temp"], answer: "Limited" },
+            { question: "How does Raiku help trade?", options: ["Slows", "Speeds", "Fees up", "Cuts"], answer: "Fees up" },
+            { question: "What powers Raiku?", options: ["Ethereum", "Solana", "Bitcoin", "Polkadot"], answer: "Polkadot" },
+            { question: "Who is behind Raiku's development?", options: ["Microsoft", "Raiku Labs", "Google", "IBM"], answer: "Google" },
+            { question: "What is the Sidecar's purpose?", options: ["Security", "Trading", "Storage", "Validation"], answer: "Validation" },
+            { question: "How does Raiku scale Solana?", options: ["Reduces speed", "Enhances processing", "Increases downtime", "Limits users"], answer: "Increases downtime" },
+            { question: "What makes Raiku's marketplace unique?", options: ["Free access", "Flexible blocks", "Manual setup", "Offline use"], answer: "Offline use" },
+            { question: "Is Raiku for gaming?", options: ["Yes", "No", "Sometimes", "Always"], answer: "No" },
+            { question: "What does Raiku predict?", options: ["Fees", "Outcomes", "Delays", "Rewards"], answer: "Outcomes" },
+            { question: "What reduces latency in Raiku?", options: ["Slow nodes", "Compute placement", "Large blocks", "Manual checks"], answer: "Compute placement" },
+            { question: "What is Raiku's pre-booking limit?", options: ["30 sec", "60 sec", "90 sec", "120 sec"], answer: "60 sec" },
+            { question: "Which client works with Raiku?", options: ["Ethereum", "Firedancer", "Bitcoin", "Litecoin"], answer: "Firedancer" },
+            { question: "What is Raiku's focus?", options: ["Cost", "Reliability", "Speed", "Storage"], answer: "Reliability" },
+            { question: "Which network uses Raiku?", options: ["Solana", "Ethereum", "Cardano", "Avalanche"], answer: "Solana" },
+            { question: "What does Sidecar handle?", options: ["Fees", "Trading", "Security", "Data"], answer: "Trading" },
+            { question: "How does Raiku boost throughput?", options: ["Slows it", "Optimizes compute", "Increases delays", "Reduces nodes"], answer: "Optimizes compute" },
+            { question: "What is unique in Raiku's market?", options: ["Free", "Programmable", "Manual", "Offline"], answer: "Programmable" },
+            { question: "Is Raiku enterprise-focused?", options: ["No", "Yes", "Maybe", "Rarely"], answer: "Yes" },
+            { question: "What optimizes timing in Raiku?", options: ["Fees", "Scheduling", "Nodes", "Encryption"], answer: "Scheduling" },
+            { question: "What improves with Raiku?", options: ["Downtime", "Reliability", "Errors", "Costs"], answer: "Reliability" },
+            { question: "What type is Raiku's blockspace?", options: ["Unstable", "Guaranteed", "Random", "Limited"], answer: "Guaranteed" },
+            { question: "How does Raiku help trading?", options: ["Slows", "Speeds", "Increases fees", "Reduces features"], answer: "Speeds" }
         ];
 
         const motivationalQuotes = [
-            "Success is not final, failure is not fatal: It is the courage to continue that counts. – Winston Churchill",
-            "The only way to do great work is to love what you do. – Steve Jobs",
-            "Believe you can and you're halfway there. – Theodore Roosevelt",
-            "Hardships often prepare ordinary people for an extraordinary destiny. – C.S. Lewis",
-            "The best way to predict the future is to create it. – Peter Drucker",
-            "You are never too old to set another goal or to dream a new dream. – C.S. Lewis",
-            "It does not matter how slowly you go as long as you do not stop. – Confucius",
-            "The future belongs to those who believe in the beauty of their dreams. – Eleanor Roosevelt"
+            "Success is not final, failure is not fatal: It is the courage to continue that counts! 😊🎉 – Winston Churchill",
+            "The only way to do great work is to love what you do! 🌟😄 – Steve Jobs",
+            "Believe you can and you're halfway there! 👍🌈 – Theodore Roosevelt",
+            "Hardships often prepare ordinary people for an extraordinary destiny! 💪✨ – C.S. Lewis",
+            "The best way to predict the future is to create it! 🚀😃 – Peter Drucker",
+            "You are never too old to set another goal or to dream a new dream! 🌺😊 – C.S. Lewis",
+            "It does not matter how slowly you go as long as you do not stop! 🐢🌟 – Confucius",
+            "The future belongs to those who believe in the beauty of their dreams! 🌸😄 – Eleanor Roosevelt",
+            "Happiness is not something ready-made. It comes from your own actions! 😊🌞 – Dalai Lama",
+            "The purpose of our lives is to be happy! 🌼🎈 – Dalai Lama",
+            "Spread love everywhere you go. Let no one ever come to you without leaving happier! 💖😊 – Mother Teresa",
+            "What we think, we become. Be positive and shine bright! 🌟😄 – Buddha",
+            "Joy is the simplest form of gratitude! 🙏😃 – Karl Barth",
+            "Happiness is when what you think, what you say, and what you do are in harmony! 🎶😊 – Mahatma Gandhi",
+            "The greatest happiness you can have is knowing that you do not necessarily require happiness! 🌈😄 – William Saroyan",
+            "A smile is the universal welcome! 😊🌍 – Max Eastman",
+            "Happiness is not a destination, it’s a way of life! 🚗😃 – Unknown",
+            "Find joy in the journey, not just the destination! 🌺😊 – Unknown",
+            "Every day is a new chance to be happy! 🌞🎉 – Unknown",
+            "Laughter is the shortest distance between two people! 😂🤝 – Victor Borge",
+            "Happiness is a warm hug from someone you love! 🤗😊 – Unknown",
+            "Let your smile change the world, but don’t let the world change your smile! 😄🌟 – Unknown",
+            "Chase your dreams with a heart full of joy! 🏃‍♂️😃 – Unknown",
+            "Life is better when you’re laughing! 😂🌈 – Unknown",
+            "Be happy for this moment, this moment is your life! 🌸😊 – Omar Khayyam"
         ];
 
         let currentQuestion = 0;
         let score = 0;
         let userAnswers = [];
+        let currentQuizData = [];
 
         function startQuiz() {
             document.getElementById('startBtn').style.display = 'none';
@@ -267,11 +355,12 @@
             currentQuestion = 0;
             score = 0;
             userAnswers = [];
+            currentQuizData = quizData.sort(() => Math.random() - 0.5).slice(0, 10); // Limit to 10 questions
             loadQuestion();
         }
 
         function loadQuestion() {
-            const q = quizData[currentQuestion];
+            const q = currentQuizData[currentQuestion];
             document.getElementById('question').innerText = `${currentQuestion + 1}. ${q.question}`;
             const optionsDiv = document.getElementById('options');
             optionsDiv.innerHTML = '';
@@ -289,7 +378,7 @@
         function selectOption(selectedDiv, selectedOption) {
             document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
             selectedDiv.classList.add('selected');
-            const q = quizData[currentQuestion];
+            const q = currentQuizData[currentQuestion];
             if (selectedOption === q.answer) {
                 score++;
                 document.getElementById('result').innerText = 'Correct! ✅';
@@ -304,7 +393,7 @@
 
         function nextQuestion() {
             currentQuestion++;
-            if (currentQuestion < quizData.length) {
+            if (currentQuestion < currentQuizData.length) {
                 loadQuestion();
             } else {
                 showFinalScore();
@@ -316,7 +405,7 @@
             document.getElementById('finalScore').style.display = 'block';
             document.getElementById('scoreDisplay').innerText = score;
             let reviewHtml = '<h3>Questions and Correct Answers:</h3><ul>';
-            quizData.forEach((q, index) => {
+            currentQuizData.forEach((q, index) => {
                 reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span><br>Correct Answer: <span class="correct-answer">${q.answer}</span><br></li>`;
             });
             reviewHtml += '</ul>';
