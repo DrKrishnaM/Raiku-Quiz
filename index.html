@@ -19,6 +19,8 @@
             background-repeat: no-repeat, no-repeat;
             background-color: #1a1a2e;
             position: relative;
+            /* Optional: Uncomment for more vibrancy */
+            /* filter: brightness(110%) contrast(110%); */
         }
         .container {
             background-color: rgba(255, 255, 255, 0.85);
@@ -178,24 +180,15 @@
 </head>
 <body>
     <div class="container">
-        <!-- 1st Page Content (Only Here) -->
         <h1>Welcome to Raiku Quiz 🌟🚀</h1>
-        <p style="color: #000; font-size: 20px; font-weight: bold;">Ready to Test Your Raiku Skills? 🎉</p>
-        <p style="color: #000; font-size: 16px; font-weight: bold; margin-top: 10px;">
-            Dive into the world of Raiku, a revolutionary project enhancing Solana's infrastructure! 
-            This quiz will challenge your knowledge about its features like deterministic execution, 
-            low-latency performance, and the innovative blockspace marketplace. Get ready to learn 
-            and have fun! 😄🌈
-        </p>
+        <p style="color: #fff; font-size: 20px;">Ready to Test Your Raiku Skills? 🎉</p>
         <button id="startBtn" onclick="startQuiz()">Start Quiz</button>
 
-        <!-- Motivational Page (No Intro) -->
         <div id="motivationalPage">
             <div id="motivationalQuote"></div>
             <button id="nextButton" onclick="startQuizQuestions()">Next</button>
         </div>
 
-        <!-- Quiz Page (No Intro) -->
         <div id="quiz">
             <h2 id="question"></h2>
             <div id="options"></div>
@@ -203,7 +196,6 @@
             <button id="nextBtn" onclick="nextQuestion()">Next</button>
         </div>
 
-        <!-- Final Score Page (No Intro) -->
         <div id="finalScore">
             <h2>Quiz Complete! 🎉🏆</h2>
             <p>Your Score: <span id="scoreDisplay"></span>/10</p>
@@ -293,27 +285,7 @@
             { question: "What optimizes in Raiku?", options: ["Fees", "Timing", "Nodes", "Data"], answer: "Nodes" },
             { question: "What improves with Raiku?", options: ["Downtime", "Reliability", "Errors", "Costs"], answer: "Costs" },
             { question: "What type is Raiku's space?", options: ["Random", "Guaranteed", "Limited", "Temp"], answer: "Limited" },
-            { question: "How does Raiku help trade?", options: ["Slows", "Speeds", "Fees up", "Cuts"], answer: "Fees up" },
-            { question: "What powers Raiku?", options: ["Ethereum", "Solana", "Bitcoin", "Polkadot"], answer: "Polkadot" },
-            { question: "Who is behind Raiku's development?", options: ["Microsoft", "Raiku Labs", "Google", "IBM"], answer: "Google" },
-            { question: "What is the Sidecar's purpose?", options: ["Security", "Trading", "Storage", "Validation"], answer: "Validation" },
-            { question: "How does Raiku scale Solana?", options: ["Reduces speed", "Enhances processing", "Increases downtime", "Limits users"], answer: "Increases downtime" },
-            { question: "What makes Raiku's marketplace unique?", options: ["Free access", "Flexible blocks", "Manual setup", "Offline use"], answer: "Offline use" },
-            { question: "Is Raiku for gaming?", options: ["Yes", "No", "Sometimes", "Always"], answer: "No" },
-            { question: "What does Raiku predict?", options: ["Fees", "Outcomes", "Delays", "Rewards"], answer: "Outcomes" },
-            { question: "What reduces latency in Raiku?", options: ["Slow nodes", "Compute placement", "Large blocks", "Manual checks"], answer: "Compute placement" },
-            { question: "What is Raiku's pre-booking limit?", options: ["30 sec", "60 sec", "90 sec", "120 sec"], answer: "60 sec" },
-            { question: "Which client works with Raiku?", options: ["Ethereum", "Firedancer", "Bitcoin", "Litecoin"], answer: "Firedancer" },
-            { question: "What is Raiku's focus?", options: ["Cost", "Reliability", "Speed", "Storage"], answer: "Reliability" },
-            { question: "Which network uses Raiku?", options: ["Solana", "Ethereum", "Cardano", "Avalanche"], answer: "Solana" },
-            { question: "What does Sidecar handle?", options: ["Fees", "Trading", "Security", "Data"], answer: "Trading" },
-            { question: "How does Raiku boost throughput?", options: ["Slows it", "Optimizes compute", "Increases delays", "Reduces nodes"], answer: "Optimizes compute" },
-            { question: "What is unique in Raiku's market?", options: ["Free", "Programmable", "Manual", "Offline"], answer: "Programmable" },
-            { question: "Is Raiku enterprise-focused?", options: ["No", "Yes", "Maybe", "Rarely"], answer: "Yes" },
-            { question: "What optimizes timing in Raiku?", options: ["Fees", "Scheduling", "Nodes", "Encryption"], answer: "Scheduling" },
-            { question: "What improves with Raiku?", options: ["Downtime", "Reliability", "Errors", "Costs"], answer: "Reliability" },
-            { question: "What type is Raiku's blockspace?", options: ["Unstable", "Guaranteed", "Random", "Limited"], answer: "Guaranteed" },
-            { question: "How does Raiku help trading?", options: ["Slows", "Speeds", "Increases fees", "Reduces features"], answer: "Speeds" }
+            { question: "How does Raiku help trade?", options: ["Slows", "Speeds", "Fees up", "Cuts"], answer: "Fees up" }
         ];
 
         const motivationalQuotes = [
@@ -347,7 +319,7 @@
         let currentQuestion = 0;
         let score = 0;
         let userAnswers = [];
-        let currentQuizData = [];
+        let currentQuizData = []; // To hold 10 random questions
 
         function startQuiz() {
             document.getElementById('startBtn').style.display = 'none';
@@ -365,7 +337,8 @@
             currentQuestion = 0;
             score = 0;
             userAnswers = [];
-            currentQuizData = quizData.sort(() => Math.random() - 0.5).slice(0, 10); // Limit to 10 questions
+            // Select 10 random questions
+            currentQuizData = quizData.sort(() => Math.random() - 0.5).slice(0, 10);
             loadQuestion();
         }
 
