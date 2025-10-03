@@ -100,6 +100,11 @@
         .option.selected {
             background-color: white !important;
             border-color: #4CAF50;
+            cursor: not-allowed; /* Disable cursor change after selection */
+        }
+        .option.disabled {
+            pointer-events: none; /* Disable further clicks */
+            opacity: 0.6; /* Visual cue for disabled state */
         }
         #nextBtn {
             background-color: #2196F3;
@@ -203,7 +208,7 @@
     </div>
 
     <div id="finalScore" class="container">
-        <h2>Quiz Completed !! 🎉🏆</h2>
+        <h2>Quiz Complete! 🎉🏆</h2>
         <p>Your Score: <span id="scoreDisplay"></span>/10</p>
         <div id="answersReview"></div>
         <button id="restartBtn" onclick="restartQuiz()">Restart Quiz</button>
@@ -389,7 +394,11 @@
         }
 
         function selectOption(selectedDiv, selectedOption) {
-            document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            // Disable all options after selection
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.add('disabled');
+                opt.onclick = null; // Remove click event
+            });
             selectedDiv.classList.add('selected');
             const q = currentQuizData[currentQuestion];
             if (selectedOption === q.answer) {
@@ -397,7 +406,7 @@
                 document.getElementById('result').innerText = 'Correct! ✅';
                 document.getElementById('result').style.color = '#4CAF50';
             } else {
-                document.getElementById('result').innerText = `Wrong! Correct answer: ${q.answer}`;
+                document.getElementById('result').innerText = 'Wrong! ❌';
                 document.getElementById('result').style.color = '#f44336';
             }
             userAnswers[currentQuestion] = selectedOption;
