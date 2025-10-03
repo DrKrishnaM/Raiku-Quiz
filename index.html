@@ -342,6 +342,15 @@
         let userAnswers = [];
         let currentQuizData = [];
 
+        // Function to shuffle array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
         function startQuiz() {
             document.querySelector('.container').style.display = 'none';
             document.getElementById('motivationalPage').style.display = 'block';
@@ -358,7 +367,7 @@
             currentQuestion = 0;
             score = 0;
             userAnswers = [];
-            currentQuizData = quizData.sort(() => Math.random() - 0.5).slice(0, 10); // Limit to 10 questions
+            currentQuizData = quizData.sort(() => Math.random() - 0.5).slice(0, 10); // 10 random questions
             loadQuestion();
         }
 
@@ -367,7 +376,8 @@
             document.getElementById('question').innerText = `${currentQuestion + 1}. ${q.question}`;
             const optionsDiv = document.getElementById('options');
             optionsDiv.innerHTML = '';
-            q.options.forEach((option) => {
+            let shuffledOptions = shuffleArray([...q.options]); // Shuffle options randomly
+            shuffledOptions.forEach((option) => {
                 const div = document.createElement('div');
                 div.className = 'option';
                 div.innerText = option;
