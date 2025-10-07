@@ -22,19 +22,34 @@
         }
         .container {
             background-color: rgba(255, 255, 255, 0.85);
-            padding: 30px;
+            padding: 20px; /* Reduced padding */
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            max-width: 600px;
+            max-width: 80%; /* Reduced width */
             width: 90%;
             text-align: center;
             position: relative;
             z-index: 2;
         }
         h1 {
-            color: #FF5722;
+            color: #FF6F61;
             text-shadow: 2px 2px #000;
             margin-bottom: 20px;
+            background: linear-gradient(45deg, #FF6F61, #6B5B95, #88B04B, #F7CAC9);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientAnimation 6s ease infinite;
+            font-size: clamp(1.5em, 4vw, 2.5em); /* Optimized size range */
+            white-space: nowrap; /* Keeps text in one line */
+            overflow: hidden; /* Hides overflow */
+            text-overflow: ellipsis; /* Adds ellipsis if text overflows */
+            max-width: 100%; /* Ensures it fits within container */
+        }
+        @keyframes gradientAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         #startBtn {
             background-color: #4CAF50;
@@ -58,10 +73,10 @@
         #motivationalPage {
             display: none;
             background-color: rgba(255, 255, 255, 0.85);
-            padding: 30px;
+            padding: 20px;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            max-width: 600px;
+            max-width: 80%;
             width: 90%;
             text-align: center;
             position: relative;
@@ -79,10 +94,17 @@
         #quiz {
             display: none;
         }
+        #timer {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #000;
+            margin-bottom: 10px;
+        }
         #question {
             font-size: 1.2em;
             margin-bottom: 20px;
             font-weight: bold;
+            color: #000;
         }
         .option {
             background-color: #f0f8ff;
@@ -93,18 +115,27 @@
             cursor: pointer;
             transition: background-color 0.3s;
             font-size: 16px;
+            color: #000;
         }
         .option:hover {
             background-color: #e6f3ff;
         }
         .option.selected {
-            background-color: white !important;
             border-color: #4CAF50;
-            cursor: not-allowed; /* Disable cursor change after selection */
+        }
+        .option.correct {
+            background-color: #88B04B;
+            color: white;
+            border-color: #88B04B;
+        }
+        .option.wrong {
+            background-color: #f44336;
+            color: white;
+            border-color: #f44336;
         }
         .option.disabled {
-            pointer-events: none; /* Disable further clicks */
-            opacity: 0.6; /* Visual cue for disabled state */
+            pointer-events: none;
+            opacity: 0.6;
         }
         #nextBtn {
             background-color: #2196F3;
@@ -128,7 +159,7 @@
         #finalScore {
             display: none;
             font-size: 24px;
-            color: #4CAF50;
+            color: #88B04B;
             position: relative;
         }
         #finalScore p {
@@ -159,9 +190,23 @@
             color: #000;
             font-weight: bold;
         }
-        .correct-answer {
+        .correct-answer-label {
             color: #000;
+            font-weight: bold;
+        }
+        .correct-answer {
+            color: #88B04B;
             font-weight: normal;
+        }
+        .your-answer-label {
+            color: #000;
+            font-weight: bold;
+        }
+        .your-answer {
+            color: #f44336; /* Default for wrong, will be overridden if correct */
+        }
+        .your-answer.correct {
+            color: #88B04B;
         }
         #restartBtn {
             background-color: #4CAF50;
@@ -179,6 +224,16 @@
         #answersReview li {
             margin-bottom: 15px;
         }
+        .tick {
+            margin-left: 5px;
+            font-size: 1.2em;
+        }
+        .green-tick {
+            color: #88B04B;
+        }
+        .red-cross {
+            color: #f44336;
+        }
     </style>
 </head>
 <body>
@@ -195,12 +250,13 @@
     </div>
 
     <div id="motivationalPage" class="container">
-        <h2 style="color: #FF5722; text-shadow: 2px 2px #000; margin-bottom: 20px;">Have Some Motivation 🌟</h2>
+        <h2 style="color: #6B5B95; text-shadow: 2px 2px #000; margin-bottom: 20px;">Have Some Motivation 🌟</h2>
         <div id="motivationalQuote"></div>
         <button id="nextButton" onclick="startQuizQuestions()">Next</button>
     </div>
 
     <div id="quiz" class="container">
+        <div id="timer">Time Left: 15s</div>
         <h2 id="question"></h2>
         <div id="options"></div>
         <div id="result"></div>
@@ -346,6 +402,8 @@
         let score = 0;
         let userAnswers = [];
         let currentQuizData = [];
+        let timeLeft = 15;
+        let timerInterval;
 
         // Function to shuffle array
         function shuffleArray(array) {
@@ -377,11 +435,14 @@
         }
 
         function loadQuestion() {
+            clearInterval(timerInterval); // Clear previous timer
+            timeLeft = 15;
+            document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
             const q = currentQuizData[currentQuestion];
             document.getElementById('question').innerText = `${currentQuestion + 1}. ${q.question}`;
             const optionsDiv = document.getElementById('options');
             optionsDiv.innerHTML = '';
-            let shuffledOptions = shuffleArray([...q.options]); // Shuffle options randomly
+            let shuffledOptions = shuffleArray([...q.options]);
             shuffledOptions.forEach((option) => {
                 const div = document.createElement('div');
                 div.className = 'option';
@@ -391,25 +452,48 @@
             });
             document.getElementById('result').innerText = '';
             document.getElementById('nextBtn').style.display = 'none';
+
+            // Start timer
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    handleTimeout(q);
+                }
+            }, 1000);
         }
 
         function selectOption(selectedDiv, selectedOption) {
-            // Disable all options after selection
+            clearInterval(timerInterval); // Stop timer on selection
             document.querySelectorAll('.option').forEach(opt => {
                 opt.classList.add('disabled');
-                opt.onclick = null; // Remove click event
+                opt.onclick = null;
             });
             selectedDiv.classList.add('selected');
             const q = currentQuizData[currentQuestion];
             if (selectedOption === q.answer) {
                 score++;
+                selectedDiv.classList.add('correct');
                 document.getElementById('result').innerText = 'Correct! ✅';
-                document.getElementById('result').style.color = '#4CAF50';
+                document.getElementById('result').style.color = '#88B04B';
             } else {
+                selectedDiv.classList.add('wrong');
                 document.getElementById('result').innerText = 'Wrong! ❌';
                 document.getElementById('result').style.color = '#f44336';
             }
             userAnswers[currentQuestion] = selectedOption;
+            document.getElementById('nextBtn').style.display = 'block';
+        }
+
+        function handleTimeout(q) {
+            document.querySelectorAll('.option').forEach(opt => {
+                opt.classList.add('disabled');
+                opt.onclick = null;
+            });
+            userAnswers[currentQuestion] = "Not Attempted";
+            document.getElementById('result').innerText = 'Time Out! Not Attempted';
+            document.getElementById('result').style.color = '#757575';
             document.getElementById('nextBtn').style.display = 'block';
         }
 
@@ -423,12 +507,20 @@
         }
 
         function showFinalScore() {
+            clearInterval(timerInterval); // Clear timer on quiz end
             document.getElementById('quiz').style.display = 'none';
             document.getElementById('finalScore').style.display = 'block';
             document.getElementById('scoreDisplay').innerText = score;
-            let reviewHtml = '<h3>Questions and Correct Answers:</h3><ul>';
+            let reviewHtml = '<h3>Questions and Results:</h3><ul>';
             currentQuizData.forEach((q, index) => {
-                reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span><br>Correct Answer: <span class="correct-answer">${q.answer}</span><br></li>`;
+                reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span>`;
+                reviewHtml += `<br><span class="correct-answer-label">Correct Answer: </span><span class="correct-answer">${q.answer}</span>`;
+                if (userAnswers[index] !== "Not Attempted") {
+                    reviewHtml += `<br><span class="your-answer-label">Your Answer: </span><span class="your-answer${userAnswers[index] === q.answer ? ' correct' : ''}">${userAnswers[index]}</span>`;
+                } else {
+                    reviewHtml += `<br><span class="your-answer-label">Your Answer: </span><span class="your-answer">Not Attempted</span>`;
+                }
+                reviewHtml += ` <span class="tick ${userAnswers[index] === q.answer ? 'green-tick' : userAnswers[index] !== "Not Attempted" ? 'red-cross' : ''}">${userAnswers[index] === q.answer ? '✅' : userAnswers[index] !== "Not Attempted" ? '❌' : ''}</span></li>`;
             });
             reviewHtml += '</ul>';
             document.getElementById('answersReview').innerHTML = reviewHtml;
