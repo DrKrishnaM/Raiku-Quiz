@@ -25,8 +25,8 @@
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            max-width: 800px;
-            width: 150%;
+            max-width: 600px;
+            width: 90%;
             text-align: center;
             position: relative;
             z-index: 2;
@@ -34,7 +34,7 @@
         h1 {
             color: #FF5722;
             text-shadow: 2px 2px #000;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
         #startBtn {
             background-color: #4CAF50;
@@ -140,6 +140,7 @@
             margin-top: 20px;
             font-weight: bold;
             font-size: 18px;
+            display: none; /* Hide result text */
         }
         #finalScore {
             display: none;
@@ -223,7 +224,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to Raiku Quiz🌟🚀 </h1>
+        <h1>Welcome to Raiku Quiz 🌟🚀</h1>
         <p style="color: #000; font-size: 20px; font-weight: bold;">Ready to Test Your Raiku Skills? 🎉</p>
         <p style="color: #000; font-size: 16px; font-weight: bold; margin-top: 10px;">
             Dive into the world of Raiku, a revolutionary project enhancing Solana's infrastructure! 
@@ -460,12 +461,8 @@
             if (selectedOption === q.answer) {
                 score++;
                 selectedDiv.classList.add('correct');
-                document.getElementById('result').innerText = 'Correct! ✅';
-                document.getElementById('result').style.color = '#4CAF50';
             } else {
                 selectedDiv.classList.add('wrong');
-                document.getElementById('result').innerText = 'Wrong! ❌';
-                document.getElementById('result').style.color = '#f44336';
             }
             userAnswers[currentQuestion] = selectedOption;
             document.getElementById('nextBtn').style.display = 'block';
@@ -477,8 +474,6 @@
                 opt.onclick = null;
             });
             userAnswers[currentQuestion] = "Not Attempted";
-            document.getElementById('result').innerText = 'Time Out! Not Attempted';
-            document.getElementById('result').style.color = '#757575';
             document.getElementById('nextBtn').style.display = 'block';
         }
 
