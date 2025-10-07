@@ -32,15 +32,15 @@
             z-index: 2;
         }
         h1 {
-            color: #FF5722;
+            color: #FF6F61;
             text-shadow: 2px 2px #000;
             margin-bottom: 20px;
-            background: linear-gradient(45deg, #FF5722, #4CAF50, #2196F3, #F44336);
+            background: linear-gradient(45deg, #FF6F61, #6B5B95, #88B04B, #F7CAC9); /* New vibrant colors */
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             animation: gradientAnimation 6s ease infinite;
-            font-size: clamp(1.5em, 5vw, 2.5em); /* Responsive font size */
+            font-size: clamp(2em, 6vw, 2.8em); /* Increased size for mobile */
             white-space: nowrap; /* Keeps text in one line */
             overflow: hidden; /* Hides overflow */
             text-overflow: ellipsis; /* Adds ellipsis if text overflows */
@@ -194,7 +194,7 @@
             font-weight: bold;
         }
         .correct-answer {
-            color: #4CAF50;
+            color: #88B04B; /* Updated to match new gradient */
             font-weight: normal;
         }
         .your-answer-label {
@@ -205,7 +205,7 @@
             color: #f44336; /* Default for wrong, will be overridden if correct */
         }
         .your-answer.correct {
-            color: #4CAF50;
+            color: #88B04B; /* Updated to match new gradient */
         }
         #restartBtn {
             background-color: #4CAF50;
@@ -228,7 +228,7 @@
             font-size: 1.2em;
         }
         .green-tick {
-            color: #4CAF50;
+            color: #88B04B; /* Updated to match new gradient */
         }
         .red-cross {
             color: #f44336;
@@ -238,7 +238,7 @@
 <body>
     <div class="container">
         <h1>Welcome to Raiku Quiz 🌟🚀</h1>
-        <p style="color: #000; font-size: 30px; font-weight: bold;">Ready to Test Your Raiku Skills? 🎉</p>
+        <p style="color: #000; font-size: 20px; font-weight: bold;">Ready to Test Your Raiku Skills? 🎉</p>
         <p style="color: #000; font-size: 16px; font-weight: bold; margin-top: 10px;">
             Dive into the world of Raiku, a revolutionary project enhancing Solana's infrastructure! 
             This quiz will challenge your knowledge about its features like deterministic execution, 
@@ -249,7 +249,7 @@
     </div>
 
     <div id="motivationalPage" class="container">
-        <h2 style="color: #FF5722; text-shadow: 2px 2px #000; margin-bottom: 20px;">Have Some Motivation 🌟</h2>
+        <h2 style="color: #6B5B95; text-shadow: 2px 2px #000; margin-bottom: 20px;">Have Some Motivation 🌟</h2>
         <div id="motivationalQuote"></div>
         <button id="nextButton" onclick="startQuizQuestions()">Next</button>
     </div>
@@ -475,7 +475,7 @@
                 score++;
                 selectedDiv.classList.add('correct');
                 document.getElementById('result').innerText = 'Correct! ✅';
-                document.getElementById('result').style.color = '#4CAF50';
+                document.getElementById('result').style.color = '#88B04B';
             } else {
                 selectedDiv.classList.add('wrong');
                 document.getElementById('result').innerText = 'Wrong! ❌';
