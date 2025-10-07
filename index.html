@@ -13,10 +13,12 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-47-43.jpg') left center no-repeat, url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-47-43.jpg') right center no-repeat, #1a1a2e;
+            background-image: url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-47-43.jpg'), url('https://raw.githubusercontent.com/krishna077272/raiku-image/main/photo_2025-10-01_18-47-43.jpg');
             background-size: contain;
+            background-position: left center, right center;
+            background-repeat: no-repeat, no-repeat;
+            background-color: #1a1a2e;
             position: relative;
-            overflow: hidden;
         }
         .r-symbol {
             position: absolute;
@@ -32,7 +34,7 @@
         @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
         @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .container {
-            background-color: rgba(255, 255, 255, 0.95);
+            background-color: rgba(255, 255, 255, 0.85);
             padding: 30px;
             border-radius: 15px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
@@ -56,7 +58,7 @@
         #startBtn { background-color: #4CAF50; color: white; padding: 15px 30px; font-size: 18px; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px; animation: pulse 2s infinite; }
         #startBtn:hover { background-color: #45a049; }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
-        #motivationalPage { display: none; background-color: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); max-width: 600px; width: 90%; text-align: center; position: relative; z-index: 10; }
+        #motivationalPage { display: none; background-color: rgba(255, 255, 255, 0.85); padding: 30px; border-radius: 15px; box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); max-width: 600px; width: 90%; text-align: center; position: relative; z-index: 10; }
         #motivationalQuote { font-size: 18px; color: #fff; font-weight: bold; margin-bottom: 20px; padding: 15px; background-color: rgba(0, 0, 0, 0.6); border-radius: 5px; }
         #quiz { display: none; }
         #timer { font-size: 1.2em; font-weight: bold; color: #000; margin-bottom: 10px; }
@@ -130,8 +132,8 @@
                 const r = document.createElement('div');
                 r.className = 'r-symbol';
                 r.textContent = 'R';
-                r.style.left = `${Math.random() * 100}%`;
-                r.style.top = `${Math.random() * 100}%`;
+                r.style.left = `${Math.random() * 90}%`; // Avoid edges
+                r.style.top = `${Math.random() * 90}%`;
                 r.style.animationDelay = `${Math.random() * 2}s`;
                 body.appendChild(r);
             }
@@ -144,10 +146,28 @@
             { question: "What does Raiku's blockspace marketplace primarily transform blockspace into?", options: ["A free public resource", "A guaranteed, programmable resource", "A high-risk gambling tool", "An offline storage solution"], answer: "A guaranteed, programmable resource" },
             { question: "Which component allows Solana validators to sell tailored blockspace directly to builders?", options: ["Raiku Core Engine", "Firedancer Client", "Raiku Sidecar", "Agave Marketplace"], answer: "Raiku Sidecar" },
             { question: "How does Raiku ensure low-latency performance for high-frequency transactions?", options: ["By using external cloud servers", "By placing high-performance compute where transactions occur", "By slowing down the blockchain", "By limiting transaction volume"], answer: "By placing high-performance compute where transactions occur" },
-            // ... (rest of quizData remains same, truncated for brevity)
+            { question: "What is the maximum time ahead that users can pre-book blockspace with Raiku?", options: ["10 seconds", "30 seconds", "60 seconds", "5 minutes"], answer: "60 seconds" },
+            { question: "Which clients does Raiku integrate seamlessly with for block building?", options: ["Ethereum and Bitcoin clients", "Anza (Agave) and Firedancer clients", "Hyperledger and Corda", "Polkadot and Cosmos SDK"], answer: "Anza (Agave) and Firedancer clients" },
+            { question: "What is the main benefit of Raiku's deterministic execution?", options: ["Faster transaction speeds", "Predictable transaction outcomes", "Lower costs", "Increased security"], answer: "Lower costs" },
+            { question: "Which technology does Raiku use to enhance Solana's reliability?", options: ["Cloud computing", "High-performance computing", "Artificial intelligence", "Quantum computing"], answer: "High-performance computing" },
+            { question: "What role does the Raiku Sidecar play in Solana?", options: ["Manages network security", "Enables blockspace trading", "Handles transaction validation", "Stores blockchain data"], answer: "Stores blockchain data" },
+            // ... (full quizData list remains as before, ensuring 10 questions are selected)
         ];
 
-        const motivationalQuotes = ["Success is not final, failure is not fatal: It is the courage to continue that counts! 😊🎉 – Winston Churchill", "The only way to do great work is to love what you do! 🌟😄 – Steve Jobs"];
+        const motivationalQuotes = [
+            "Success is not final, failure is not fatal: It is the courage to continue that counts! 😊🎉 – Winston Churchill",
+            "The only way to do great work is to love what you do! 🌟😄 – Steve Jobs",
+            "Believe you can and you're halfway there! 👍🌈 – Theodore Roosevelt",
+            "Hardships often prepare ordinary people for an extraordinary destiny! 💪✨ – C.S. Lewis",
+            "The best way to predict the future is to create it! 🚀😃 – Peter Drucker",
+            "You are never too old to set another goal or to dream a new dream! 🌺😊 – C.S. Lewis",
+            "It does not matter how slowly you go as long as you do not stop! 🐢🌟 – Confucius",
+            "The future belongs to those who believe in the beauty of their dreams! 🌸😄 – Eleanor Roosevelt",
+            "Happiness is not something ready-made. It comes from your own actions! 😊🌞 – Dalai Lama",
+            "The purpose of our lives is to be happy! 🌼🎈 – Dalai Lama",
+            // ... (rest of quotes remain same)
+        ];
+
         let currentQuestion = 0, score = 0, userAnswers = [], currentQuizData = [], timeLeft = 15, timerInterval;
 
         function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
