@@ -89,6 +89,7 @@
             font-size: 1.2em;
             margin-bottom: 20px;
             font-weight: bold;
+            color: #000;
         }
         .option {
             background-color: #f0f8ff;
@@ -99,6 +100,7 @@
             cursor: pointer;
             transition: background-color 0.3s;
             font-size: 16px;
+            color: #000;
         }
         .option:hover {
             background-color: #e6f3ff;
@@ -138,6 +140,7 @@
             margin-top: 20px;
             font-weight: bold;
             font-size: 18px;
+            display: none; /* Hide result text */
         }
         #finalScore {
             display: none;
@@ -173,9 +176,23 @@
             color: #000;
             font-weight: bold;
         }
-        .correct-answer {
+        .correct-answer-label {
             color: #000;
+            font-weight: bold;
+        }
+        .correct-answer {
+            color: #4CAF50;
             font-weight: normal;
+        }
+        .your-answer-label {
+            color: #000;
+            font-weight: bold;
+        }
+        .your-answer {
+            color: #f44336; /* Default for wrong, will be overridden if correct */
+        }
+        .your-answer.correct {
+            color: #4CAF50;
         }
         #restartBtn {
             background-color: #4CAF50;
@@ -192,6 +209,16 @@
         }
         #answersReview li {
             margin-bottom: 15px;
+        }
+        .tick {
+            margin-left: 5px;
+            font-size: 1.2em;
+        }
+        .green-tick {
+            color: #4CAF50;
+        }
+        .red-cross {
+            color: #f44336;
         }
     </style>
 </head>
@@ -434,12 +461,8 @@
             if (selectedOption === q.answer) {
                 score++;
                 selectedDiv.classList.add('correct');
-                document.getElementById('result').innerText = 'Correct! ✅';
-                document.getElementById('result').style.color = '#4CAF50';
             } else {
                 selectedDiv.classList.add('wrong');
-                document.getElementById('result').innerText = 'Wrong! ❌';
-                document.getElementById('result').style.color = '#f44336';
             }
             userAnswers[currentQuestion] = selectedOption;
             document.getElementById('nextBtn').style.display = 'block';
@@ -451,8 +474,6 @@
                 opt.onclick = null;
             });
             userAnswers[currentQuestion] = "Not Attempted";
-            document.getElementById('result').innerText = 'Time Out! Not Attempted';
-            document.getElementById('result').style.color = '#757575';
             document.getElementById('nextBtn').style.display = 'block';
         }
 
@@ -472,15 +493,14 @@
             document.getElementById('scoreDisplay').innerText = score;
             let reviewHtml = '<h3>Questions and Results:</h3><ul>';
             currentQuizData.forEach((q, index) => {
-                reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span><br>`;
-                if (userAnswers[index] === q.answer) {
-                    reviewHtml += '<span style="color: #4CAF50;">Correct Answer: ' + q.answer + '</span><br>';
-                } else if (userAnswers[index] === "Not Attempted") {
-                    reviewHtml += '<span style="color: #757575;">Not Attempted - Correct Answer: ' + q.answer + '</span><br>';
+                reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span>`;
+                reviewHtml += `<br><span class="correct-answer-label">Correct Answer: </span><span class="correct-answer">${q.answer}</span>`;
+                if (userAnswers[index] !== "Not Attempted") {
+                    reviewHtml += `<br><span class="your-answer-label">Your Answer: </span><span class="your-answer${userAnswers[index] === q.answer ? ' correct' : ''}">${userAnswers[index]}</span>`;
                 } else {
-                    reviewHtml += '<span style="color: #f44336;">Wrong (Your Answer: ' + userAnswers[index] + ') - Correct Answer: ' + q.answer + '</span><br>';
+                    reviewHtml += `<br><span class="your-answer-label">Your Answer: </span><span class="your-answer">Not Attempted</span>`;
                 }
-                reviewHtml += '</li>';
+                reviewHtml += ` <span class="tick ${userAnswers[index] === q.answer ? 'green-tick' : userAnswers[index] !== "Not Attempted" ? 'red-cross' : ''}">${userAnswers[index] === q.answer ? '✅' : userAnswers[index] !== "Not Attempted" ? '❌' : ''}</span></li>`;
             });
             reviewHtml += '</ul>';
             document.getElementById('answersReview').innerHTML = reviewHtml;
