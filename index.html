@@ -39,16 +39,18 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            animation: gradientAnimation 6s ease infinite;
-            font-size: clamp(1.5em, 5vw, 2.5em); /* Responsive font size */
-            white-space: nowrap; /* Keeps text in one line */
-            overflow: hidden; /* Hides overflow */
-            text-overflow: ellipsis; /* Adds ellipsis if text overflows */
+            animation: gradientAnimation 6s ease infinite, bounce 2s ease infinite;
+            font-size: 2.5em;
         }
         @keyframes gradientAnimation {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
+        }
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-20px); }
+            60% { transform: translateY(-10px); }
         }
         #startBtn {
             background-color: #4CAF50;
@@ -237,301 +239,304 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to Raiku Quiz 🌟🚀</h1>
-        <p style="color: #000; font-size: 20px; font-weight: bold;">Ready to Test Your Raiku Skills? 🎉</p>
+        <h1>Welcome to Raiku Quiz </h1>
+        <p style="color: #000; font-size: 20px; font-weight: bold;">Ready to Test Your Raiku Skills? </p>
         <p style="color: #000; font-size: 16px; font-weight: bold; margin-top: 10px;">
             Dive into the world of Raiku, a revolutionary project enhancing Solana's infrastructure! 
             This quiz will challenge your knowledge about its features like deterministic execution, 
             low-latency performance, and the innovative blockspace marketplace. Get ready to learn 
-            and have fun! 😄🌈
+            and have fun! 
         </p>
         <button id="startBtn" onclick="startQuiz()">Start Quiz</button>
     </div>
 
-    <div id="motivationalPage" class="container">
-        <h2 style="color: #FF5722; text-shadow: 2px 2px #000; margin-bottom: 20px;">Have Some Motivation 🌟</h2>
-        <div id="motivationalQuote"></div>
-        <button id="nextButton" onclick="startQuizQuestions()">Next</button>
-    </div>
+<div id="motivationalPage" class="container">
+    <h2 style="color: #FF5722; text-shadow: 2px 2px #000; margin-bottom: 20px;">Have Some Motivation </h2>
+    <div id="motivationalQuote"></div>
+    <button id="nextButton" onclick="startQuizQuestions()">Next</button>
+</div>
 
-    <div id="quiz" class="container">
-        <div id="timer">Time Left: 15s</div>
-        <h2 id="question"></h2>
-        <div id="options"></div>
-        <div id="result"></div>
-        <button id="nextBtn" onclick="nextQuestion()">Next</button>
-    </div>
+<div id="quiz" class="container">
+    <div id="timer">Time Left: 15s</div>
+    <h2 id="question"></h2>
+    <div id="options"></div>
+    <div id="result"></div>
+    <button id="nextBtn" onclick="nextQuestion()">Next</button>
+</div>
 
-    <div id="finalScore" class="container">
-        <h2>Quiz Complete! 🎉🏆</h2>
-        <p>Your Score: <span id="scoreDisplay"></span>/10</p>
-        <div id="answersReview"></div>
-        <button id="restartBtn" onclick="restartQuiz()">Restart Quiz</button>
-    </div>
+<div id="finalScore" class="container">
+    <h2>Quiz Complete! </h2>
+    <p>Your Score: <span id="scoreDisplay"></span>/10</p>
+    <div id="answersReview"></div>
+    <button id="restartBtn" onclick="restartQuiz()">Restart Quiz</button>
+</div>
 
-    <script>
-        const quizData = [
-            { question: "What is the primary goal of the Raiku project?", options: ["To create a new cryptocurrency token", "To enhance Solana infrastructure for enterprise-grade reliability", "To develop mobile apps for blockchain gaming", "To build a decentralized social media platform"], answer: "To enhance Solana infrastructure for enterprise-grade reliability" },
-            { question: "Which feature of Raiku guarantees predictable outcomes for transactions?", options: ["Low-Latency Performance", "Deterministic Execution", "Fair Blockspace Marketplace", "Advanced Scheduling Engine"], answer: "Deterministic Execution" },
-            { question: "What does Raiku's blockspace marketplace primarily transform blockspace into?", options: ["A free public resource", "A guaranteed, programmable resource", "A high-risk gambling tool", "An offline storage solution"], answer: "A guaranteed, programmable resource" },
-            { question: "Which component allows Solana validators to sell tailored blockspace directly to builders?", options: ["Raiku Core Engine", "Firedancer Client", "Raiku Sidecar", "Agave Marketplace"], answer: "Raiku Sidecar" },
-            { question: "How does Raiku ensure low-latency performance for high-frequency transactions?", options: ["By using external cloud servers", "By placing high-performance compute where transactions occur", "By slowing down the blockchain", "By limiting transaction volume"], answer: "By placing high-performance compute where transactions occur" },
-            { question: "What is the maximum time ahead that users can pre-book blockspace with Raiku?", options: ["10 seconds", "30 seconds", "60 seconds", "5 minutes"], answer: "60 seconds" },
-            { question: "Which clients does Raiku integrate seamlessly with for block building?", options: ["Ethereum and Bitcoin clients", "Anza (Agave) and Firedancer clients", "Hyperledger and Corda", "Polkadot and Cosmos SDK"], answer: "Anza (Agave) and Firedancer clients" },
-            { question: "What is the main benefit of Raiku's deterministic execution?", options: ["Faster transaction speeds", "Predictable transaction outcomes", "Lower costs", "Increased security"], answer: "Lower costs" },
-            { question: "Which technology does Raiku use to enhance Solana's reliability?", options: ["Cloud computing", "High-performance computing", "Artificial intelligence", "Quantum computing"], answer: "High-performance computing" },
-            { question: "What role does the Raiku Sidecar play in Solana?", options: ["Manages network security", "Enables blockspace trading", "Handles transaction validation", "Stores blockchain data"], answer: "Stores blockchain data" },
-            { question: "How does Raiku improve transaction throughput on Solana?", options: ["By reducing block size", "By optimizing compute placement", "By increasing block time", "By limiting user access"], answer: "By optimizing compute placement" },
-            { question: "What is a key feature of Raiku's blockspace marketplace?", options: ["Free blockspace allocation", "Programmable resource allocation", "Manual transaction approval", "Offline processing"], answer: "Free blockspace allocation" },
-            { question: "What does Raiku's low-latency focus aim to achieve?", options: ["Higher transaction costs", "Faster transaction processing", "Reduced network security", "Larger block sizes"], answer: "Faster transaction processing" },
-            { question: "How long can Raiku pre-book blockspace in advance?", options: ["Up to 10 seconds", "Up to 30 seconds", "Up to 60 seconds", "Up to 5 minutes"], answer: "Up to 60 seconds" },
-            { question: "Which client is NOT integrated with Raiku for block building?", options: ["Anza (Agave)", "Firedancer", "Ethereum", "Solana"], answer: "Solana" },
-            { question: "What is the purpose of Raiku's advanced scheduling engine?", options: ["To manage validator rewards", "To optimize transaction scheduling", "To encrypt blockchain data", "To reduce network latency"], answer: "To optimize transaction scheduling" },
-            { question: "What type of resource does Raiku make blockspace into?", options: ["Unpredictable", "Guaranteed", "Unlimited", "Temporary"], answer: "Guaranteed" },
-            { question: "How does Raiku support high-frequency trading?", options: ["By limiting transaction speed", "By enhancing low-latency performance", "By increasing block intervals", "By reducing compute power"], answer: "By enhancing low-latency performance" },
-            { question: "What is the foundation of Raiku's technology?", options: ["Ethereum blockchain", "Solana blockchain", "Bitcoin network", "Hyperledger"], answer: "Solana blockchain" },
-            { question: "Which team developed Raiku?", options: ["Ethereum Foundation", "Solana Labs", "Raiku Labs", "Consensys"], answer: "Raiku Labs" },
-            { question: "What is the primary focus of Raiku's Sidecar?", options: ["Data storage", "Blockspace trading", "Network security", "User authentication"], answer: "Blockspace trading" },
-            { question: "How does Raiku enhance Solana's scalability?", options: ["By reducing node count", "By improving transaction processing", "By increasing block time", "By limiting features"], answer: "By improving transaction processing" },
-            { question: "What is a key advantage of Raiku's marketplace?", options: ["Free access", "Customizable blockspace", "Manual control", "Offline mode"], answer: "Customizable blockspace" },
-            { question: "Which technology does Raiku use to optimize transaction scheduling?", options: ["Machine learning", "Distributed computing", "Quantum algorithms", "Graph theory"], answer: "Distributed computing" },
-            { question: "What is the maximum throughput Raiku aims to achieve on Solana?", options: ["10,000 TPS", "50,000 TPS", "100,000 TPS", "500,000 TPS"], answer: "100,000 TPS" },
-            { question: "Which protocol does Raiku leverage to ensure deterministic execution?", options: ["Proof of Work", "Proof of Stake", "Tower BFT", "Practical Byzantine Fault Tolerance"], answer: "Tower BFT" },
-            { question: "How does Raiku's Sidecar interact with Solana validators?", options: ["Through API calls", "Via direct peer-to-peer connections", "Using a centralized server", "Through manual configuration"], answer: "Via direct peer-to-peer connections" },
-            { question: "What is the primary benefit of Raiku's low-latency infrastructure?", options: ["Reduced energy consumption", "Improved transaction finality", "Enhanced user privacy", "Increased decentralization"], answer: "Improved transaction finality" },
-            { question: "Which layer of the Solana architecture does Raiku enhance?", options: ["Application layer", "Consensus layer", "Networking layer", "Data storage layer"], answer: "Networking layer" },
-            { question: "What is the role of the Raiku Core Engine in transaction processing?", options: ["Validates transactions", "Optimizes blockspace allocation", "Handles network routing", "Stores transaction history"], answer: "Optimizes blockspace allocation" },
-            { question: "What is the main purpose of Raiku's blockspace marketplace?", options: ["To increase validator fees", "To provide programmable blockspace", "To reduce transaction speed", "To store historical data"], answer: "To provide programmable blockspace" },
-            { question: "Which component of Raiku handles high-performance computing?", options: ["Raiku Sidecar", "Firedancer Client", "Raiku Core Engine", "Agave Marketplace"], answer: "Raiku Core Engine" },
-            { question: "How does Raiku improve Solana's network reliability?", options: ["By increasing node downtime", "By optimizing compute placement", "By reducing transaction volume", "By adding external servers"], answer: "By optimizing compute placement" },
-            { question: "What is the maximum blockspace pre-booking window in Raiku?", options: ["30 seconds", "60 seconds", "90 seconds", "120 seconds"], answer: "60 seconds" },
-            { question: "Which technology supports Raiku's low-latency performance?", options: ["Cloud storage", "High-performance computing", "Decentralized databases", "Quantum networking"], answer: "High-performance computing" },
-            { question: "What is the role of the Firedancer client in Raiku's ecosystem?", options: ["Manages blockspace trading", "Enhances transaction validation", "Optimizes network performance", "Stores user data"], answer: "Optimizes network performance" },
-            { question: "How does Raiku ensure fair blockspace allocation?", options: ["Through manual oversight", "Via a marketplace mechanism", "By limiting validator access", "Through random selection"], answer: "Via a marketplace mechanism" },
-            { question: "Which aspect of Solana does Raiku's Sidecar improve?", options: ["Transaction speed", "Blockspace trading", "Consensus mechanism", "Data encryption"], answer: "Blockspace trading" },
-            { question: "What is the primary goal of Raiku's advanced scheduling engine?", options: ["To reduce network latency", "To optimize transaction timing", "To increase block size", "To manage user accounts"], answer: "To optimize transaction timing" },
-            { question: "Which protocol layer does Raiku enhance in Solana?", options: ["Application layer", "Networking layer", "Consensus layer", "Storage layer"], answer: "Networking layer" },
-            { question: "How does Raiku support enterprise-grade reliability on Solana?", options: ["By adding more nodes", "By enhancing infrastructure", "By reducing security", "By increasing downtime"], answer: "By enhancing infrastructure" },
-            { question: "What is the key benefit of Raiku's programmable blockspace?", options: ["Faster node validation", "Customizable transaction slots", "Reduced costs", "Increased latency"], answer: "Customizable transaction slots" },
-            { question: "Which component of Raiku manages transaction finality?", options: ["Raiku Sidecar", "Raiku Core Engine", "Firedancer Client", "Agave Marketplace"], answer: "Raiku Core Engine" },
-            { question: "How does Raiku optimize Solana's transaction processing?", options: ["By increasing block intervals", "By placing compute near transactions", "By reducing validator count", "By adding external delays"], answer: "By placing compute near transactions" },
-            { question: "What is the role of the Agave Marketplace in Raiku?", options: ["Handles transaction validation", "Facilitates blockspace trading", "Stores blockchain data", "Manages network security"], answer: "Facilitates blockspace trading" },
-            { question: "Which technology does Raiku use to enhance scalability?", options: ["Cloud computing", "High-performance computing", "Centralized servers", "Legacy systems"], answer: "High-performance computing" },
-            { question: "What is the maximum transaction rate Raiku targets?", options: ["50,000 TPS", "100,000 TPS", "200,000 TPS", "1,000,000 TPS"], answer: "100,000 TPS" },
-            { question: "How does Raiku's infrastructure reduce latency?", options: ["By increasing block size", "By optimizing compute placement", "By slowing network speed", "By adding manual checks"], answer: "By optimizing compute placement" },
-            { question: "Which part of Solana does Raiku's Core Engine enhance?", options: ["Consensus mechanism", "Blockspace allocation", "Data storage", "User interface"], answer: "Blockspace allocation" },
-            { question: "What is the primary function of Raiku's Sidecar?", options: ["To validate transactions", "To enable blockspace sales", "To encrypt data", "To manage nodes"], answer: "To enable blockspace sales" },
-            { question: "How does Raiku improve Solana's network performance?", options: ["By reducing throughput", "By enhancing low-latency", "By increasing downtime", "By limiting features"], answer: "By enhancing low-latency" },
-            { question: "What is the key feature of Raiku's deterministic execution?", options: ["Random outcomes", "Predictable results", "Higher costs", "Increased errors"], answer: "Predictable results" },
-            { question: "Which component of Raiku optimizes transaction scheduling?", options: ["Raiku Sidecar", "Advanced Scheduling Engine", "Firedancer Client", "Agave Marketplace"], answer: "Advanced Scheduling Engine" },
-            { question: "How does Raiku ensure high-frequency transaction support?", options: ["By limiting speed", "By enhancing low-latency", "By increasing delays", "By reducing compute"], answer: "By enhancing low-latency" },
-            { question: "What is the role of high-performance computing in Raiku?", options: ["To store data", "To enhance transaction speed", "To manage validators", "To encrypt transactions"], answer: "To enhance transaction speed" },
-            { question: "Which layer of Solana benefits from Raiku's enhancements?", options: ["Application layer", "Networking layer", "Consensus layer", "Storage layer"], answer: "Networking layer" },
-            { question: "What is the purpose of Raiku's blockspace pre-booking?", options: ["To increase costs", "To guarantee transaction slots", "To reduce speed", "To limit access"], answer: "To guarantee transaction slots" },
-            { question: "How does Raiku's marketplace function?", options: ["Through manual allocation", "Via programmable resources", "By random selection", "Through centralized control"], answer: "Via programmable resources" },
-            { question: "Which technology supports Raiku's reliability improvements?", options: ["Cloud servers", "High-performance computing", "Legacy systems", "Decentralized storage"], answer: "High-performance computing" },
-            { question: "What is the maximum pre-booking time for Raiku's blockspace?", options: ["30 seconds", "60 seconds", "90 seconds", "120 seconds"], answer: "60 seconds" },
-            { question: "How does Raiku enhance Solana's transaction finality?", options: ["By increasing latency", "By optimizing compute", "By reducing nodes", "By adding delays"], answer: "By optimizing compute" },
-            { question: "Which component of Raiku facilitates validator interactions?", options: ["Raiku Core Engine", "Raiku Sidecar", "Firedancer Client", "Agave Marketplace"], answer: "Raiku Sidecar" },
-            { question: "What is the primary benefit of Raiku's network enhancements?", options: ["Increased downtime", "Improved reliability", "Slower transactions", "Higher fees"], answer: "Improved reliability" },
-            { question: "How does Raiku support scalable blockchain solutions?", options: ["By reducing throughput", "By enhancing infrastructure", "By limiting access", "By increasing errors"], answer: "By enhancing infrastructure" },
-            { question: "What is the role of the Firedancer Client in Raiku's system?", options: ["To trade blockspace", "To optimize network performance", "To validate transactions", "To store data"], answer: "To optimize network performance" },
-            { question: "Which aspect of Solana does Raiku's scheduling engine improve?", options: ["Transaction timing", "Data storage", "Network security", "User authentication"], answer: "Transaction timing" },
-            { question: "How does Raiku's Core Engine contribute to Solana?", options: ["By managing nodes", "By optimizing blockspace", "By encrypting data", "By reducing speed"], answer: "By optimizing blockspace" },
-            { question: "What is the key advantage of Raiku's low-latency design?", options: ["Faster transaction processing", "Increased costs", "Reduced security", "Larger blocks"], answer: "Faster transaction processing" },
-            { question: "Which protocol does Raiku use for network consensus?", options: ["Proof of Work", "Tower BFT", "Proof of Stake", "Delegated Proof of Stake"], answer: "Tower BFT" },
-            { question: "How does Raiku's Sidecar enhance blockspace trading?", options: ["By manual allocation", "By enabling direct sales", "By reducing capacity", "By adding delays"], answer: "By enabling direct sales" },
-            { question: "What is the maximum capacity Raiku aims for on Solana?", options: ["50,000 TPS", "100,000 TPS", "250,000 TPS", "500,000 TPS"], answer: "100,000 TPS" },
-            { question: "Which technology does Raiku use to improve transaction throughput?", options: ["Cloud computing", "High-performance computing", "Centralized servers", "Legacy networks"], answer: "High-performance computing" },
-            { question: "How does Raiku's marketplace ensure fairness?", options: ["Through random allocation", "Via a competitive market", "By manual oversight", "Through centralized control"], answer: "Via a competitive market" },
-            { question: "What is the primary role of Raiku's infrastructure enhancements?", options: ["To increase latency", "To enhance reliability", "To reduce throughput", "To limit access"], answer: "To enhance reliability" },
-            { question: "Which component of Raiku optimizes network routing?", options: ["Raiku Sidecar", "Raiku Core Engine", "Firedancer Client", "Agave Marketplace"], answer: "Raiku Core Engine" },
-            { question: "How does Raiku support high-throughput transactions?", options: ["By reducing compute", "By optimizing placement", "By increasing delays", "By limiting nodes"], answer: "By optimizing placement" },
-            { question: "What is the key feature of Raiku's blockspace allocation?", options: ["Random distribution", "Guaranteed slots", "Manual assignment", "Temporary access"], answer: "Guaranteed slots" },
-            { question: "Which technology underpins Raiku's scalability improvements?", options: ["Cloud storage", "High-performance computing", "Decentralized nodes", "Legacy systems"], answer: "High-performance computing" },
-            { question: "How does Raiku enhance Solana's performance metrics?", options: ["By increasing downtime", "By improving latency", "By reducing capacity", "By adding errors"], answer: "By improving latency" },
-            { question: "What is the role of Raiku's Agave Marketplace in blockspace trading?", options: ["To validate transactions", "To facilitate market transactions", "To store data", "To manage nodes"], answer: "To facilitate market transactions" },
-            { question: "How does Raiku optimize Solana's consensus mechanism?", options: ["By reducing node count", "By enhancing Tower BFT", "By increasing latency", "By limiting throughput"], answer: "By enhancing Tower BFT" },
-            { question: "What is the primary function of Raiku's networking layer enhancements?", options: ["To increase costs", "To improve transaction speed", "To reduce security", "To limit access"], answer: "To improve transaction speed" },
-            { question: "Which component of Raiku ensures programmable blockspace?", options: ["Raiku Sidecar", "Raiku Core Engine", "Advanced Scheduling Engine", "Agave Marketplace"], answer: "Agave Marketplace" },
-            { question: "How does Raiku support real-time transaction processing?", options: ["By adding delays", "By enhancing low-latency", "By reducing compute", "By limiting nodes"], answer: "By enhancing low-latency" },
-            { question: "What is the key benefit of Raiku's high-performance computing?", options: ["Increased downtime", "Faster transaction finality", "Higher costs", "Reduced scalability"], answer: "Faster transaction finality" },
-            { question: "Which technology does Raiku use to enhance network routing?", options: ["Cloud servers", "Distributed computing", "Legacy systems", "Quantum networks"], answer: "Distributed computing" },
-            { question: "How does Raiku's infrastructure improve Solana's throughput?", options: ["By reducing speed", "By optimizing compute placement", "By increasing delays", "By limiting access"], answer: "By optimizing compute placement" },
-            { question: "What is the role of Raiku's Firedancer Client in performance?", options: ["To trade blockspace", "To optimize network latency", "To validate transactions", "To store data"], answer: "To optimize network latency" },
-            { question: "Which aspect of Solana does Raiku's Core Engine target?", options: ["Data storage", "Blockspace optimization", "Network security", "User authentication"], answer: "Blockspace optimization" },
-            { question: "How does Raiku ensure efficient blockspace utilization?", options: ["By manual allocation", "Via programmable resources", "By random distribution", "Through centralized control"], answer: "Via programmable resources" },
-            { question: "What is the maximum latency reduction Raiku targets?", options: ["10 ms", "50 ms", "100 ms", "200 ms"], answer: "50 ms" },
-            { question: "Which component of Raiku enhances transaction scalability?", options: ["Raiku Sidecar", "Raiku Core Engine", "Firedancer Client", "Agave Marketplace"], answer: "Raiku Core Engine" },
-            { question: "How does Raiku improve Solana's network efficiency?", options: ["By increasing errors", "By optimizing infrastructure", "By reducing throughput", "By adding delays"], answer: "By optimizing infrastructure" },
-            { question: "What is the key feature of Raiku's transaction scheduling?", options: ["Random timing", "Optimized timing", "Higher costs", "Increased latency"], answer: "Optimized timing" },
-            { question: "Which technology supports Raiku's blockspace pre-booking?", options: ["Cloud computing", "High-performance computing", "Decentralized storage", "Legacy systems"], answer: "High-performance computing" },
-            { question: "How does Raiku enhance Solana's validator performance?", options: ["By reducing capacity", "By improving compute", "By increasing downtime", "By limiting access"], answer: "By improving compute" }
-        ];
+<script>
+    const quizData = [
+        { question: "What is the primary goal of the Raiku project?", options: ["To create a new cryptocurrency token", "To enhance Solana infrastructure for enterprise-grade reliability", "To develop mobile apps for blockchain gaming", "To build a decentralized social media platform"], answer: "To enhance Solana infrastructure for enterprise-grade reliability" },
+        { question: "Which feature of Raiku guarantees predictable outcomes for transactions?", options: ["Low-Latency Performance", "Deterministic Execution", "Fair Blockspace Marketplace", "Advanced Scheduling Engine"], answer: "Deterministic Execution" },
+        { question: "What does Raiku's blockspace marketplace primarily transform blockspace into?", options: ["A free public resource", "A guaranteed, programmable resource", "A high-risk gambling tool", "An offline storage solution"], answer: "A guaranteed, programmable resource" },
+        { question: "Which component allows Solana validators to sell tailored blockspace directly to builders?", options: ["Raiku Core Engine", "Firedancer Client", "Raiku Sidecar", "Agave Marketplace"], answer: "Raiku Sidecar" },
+        { question: "How does Raiku ensure low-latency performance for high-frequency transactions?", options: ["By using external cloud servers", "By placing high-performance compute where transactions occur", "By slowing down the blockchain", "By limiting transaction volume"], answer: "By placing high-performance compute where transactions occur" },
+        { question: "What is the maximum time ahead that users can pre-book blockspace with Raiku?", options: ["10 seconds", "30 seconds", "60 seconds", "5 minutes"], answer: "60 seconds" },
+        { question: "Which clients does Raiku integrate seamlessly with for block building?", options: ["Ethereum and Bitcoin clients", "Anza (Agave) and Firedancer clients", "Hyperledger and Corda", "Polkadot and Cosmos SDK"], answer: "Anza (Agave) and Firedancer clients" },
+        { question: "What is the main benefit of Raiku's deterministic execution?", options: ["Faster transaction speeds", "Predictable transaction outcomes", "Lower costs", "Increased security"], answer: "Lower costs" },
+        { question: "Which technology does Raiku use to enhance Solana's reliability?", options: ["Cloud computing", "High-performance computing", "Artificial intelligence", "Quantum computing"], answer: "High-performance computing" },
+        { question: "What role does the Raiku Sidecar play in Solana?", options: ["Manages network security", "Enables blockspace trading", "Handles transaction validation", "Stores blockchain data"], answer: "Stores blockchain data" },
+        { question: "How does Raiku improve transaction throughput on Solana?", options: ["By reducing block size", "By optimizing compute placement", "By increasing block time", "By limiting user access"], answer: "By optimizing compute placement" },
+        { question: "What is a key feature of Raiku's blockspace marketplace?", options: ["Free blockspace allocation", "Programmable resource allocation", "Manual transaction approval", "Offline processing"], answer: "Free blockspace allocation" },
+        { question: "What does Raiku's low-latency focus aim to achieve?", options: ["Higher transaction costs", "Faster transaction processing", "Reduced network security", "Larger block sizes"], answer: "Faster transaction processing" },
+        { question: "How long can Raiku pre-book blockspace in advance?", options: ["Up to 10 seconds", "Up to 30 seconds", "Up to 60 seconds", "Up to 5 minutes"], answer: "Up to 60 seconds" },
+        { question: "Which client is NOT integrated with Raiku for block building?", options: ["Anza (Agave)", "Firedancer", "Ethereum", "Solana"], answer: "Solana" },
+        { question: "What is the purpose of Raiku's advanced scheduling engine?", options: ["To manage validator rewards", "To optimize transaction scheduling", "To encrypt blockchain data", "To reduce network latency"], answer: "To optimize transaction scheduling" },
+        { question: "What type of resource does Raiku make blockspace into?", options: ["Unpredictable", "Guaranteed", "Unlimited", "Temporary"], answer: "Guaranteed" },
+        { question: "How does Raiku support high-frequency trading?", options: ["By limiting transaction speed", "By enhancing low-latency performance", "By increasing block intervals", "By reducing compute power"], answer: "By enhancing low-latency performance" },
+        { question: "What is the foundation of Raiku's technology?", options: ["Ethereum blockchain", "Solana blockchain", "Bitcoin network", "Hyperledger"], answer: "Solana blockchain" },
+        { question: "Which team developed Raiku?", options: ["Ethereum Foundation", "Solana Labs", "Raiku Labs", "Consensys"], answer: "Raiku Labs" },
+        { question: "What is the primary focus of Raiku's Sidecar?", options: ["Data storage", "Blockspace trading", "Network security", "User authentication"], answer: "Blockspace trading" },
+        { question: "How does Raiku enhance Solana's scalability?", options: ["By reducing node count", "By improving transaction processing", "By increasing block time", "By limiting features"], answer: "By improving transaction processing" },
+        { question: "What is a key advantage of Raiku's marketplace?", options: ["Free access", "Customizable blockspace", "Manual control", "Offline mode"], answer: "Customizable blockspace" },
+        { question: "Which technology does Raiku use to optimize transaction scheduling?", options: ["Machine learning", "Distributed computing", "Quantum algorithms", "Graph theory"], answer: "Distributed computing" },
+        { question: "What is the maximum throughput Raiku aims to achieve on Solana?", options: ["10,000 TPS", "50,000 TPS", "100,000 TPS", "500,000 TPS"], answer: "100,000 TPS" },
+        { question: "Which protocol does Raiku leverage to ensure deterministic execution?", options: ["Proof of Work", "Proof of Stake", "Tower BFT", "Practical Byzantine Fault Tolerance"], answer: "Tower BFT" },
+        { question: "How does Raiku's Sidecar interact with Solana validators?", options: ["Through API calls", "Via direct peer-to-peer connections", "Using a centralized server", "Through manual configuration"], answer: "Via direct peer-to-peer connections" },
+        { question: "What is the primary benefit of Raiku's low-latency infrastructure?", options: ["Reduced energy consumption", "Improved transaction finality", "Enhanced user privacy", "Increased decentralization"], answer: "Improved transaction finality" },
+        { question: "Which layer of the Solana architecture does Raiku enhance?", options: ["Application layer", "Consensus layer", "Networking layer", "Data storage layer"], answer: "Networking layer" },
+        { question: "What is the role of the Raiku Core Engine in transaction processing?", options: ["Validates transactions", "Optimizes blockspace allocation", "Handles network routing", "Stores transaction history"], answer: "Optimizes blockspace allocation" },
+        { question: "What is the main purpose of Raiku's blockspace marketplace?", options: ["To increase validator fees", "To provide programmable blockspace", "To reduce transaction speed", "To store historical data"], answer: "To provide programmable blockspace" },
+        { question: "Which component of Raiku handles high-performance computing?", options: ["Raiku Sidecar", "Firedancer Client", "Raiku Core Engine", "Agave Marketplace"], answer: "Raiku Core Engine" },
+        { question: "How does Raiku improve Solana's network reliability?", options: ["By increasing node downtime", "By optimizing compute placement", "By reducing transaction volume", "By adding external servers"], answer: "By optimizing compute placement" },
+        { question: "What is the maximum blockspace pre-booking window in Raiku?", options: ["30 seconds", "60 seconds", "90 seconds", "120 seconds"], answer: "60 seconds" },
+        { question: "Which technology supports Raiku's low-latency performance?", options: ["Cloud storage", "High-performance computing", "Decentralized databases", "Quantum networking"], answer: "High-performance computing" },
+        { question: "What is the role of the Firedancer client in Raiku's ecosystem?", options: ["Manages blockspace trading", "Enhances transaction validation", "Optimizes network performance", "Stores user data"], answer: "Optimizes network performance" },
+        { question: "How does Raiku ensure fair blockspace allocation?", options: ["Through manual oversight", "Via a marketplace mechanism", "By limiting validator access", "Through random selection"], answer: "Via a marketplace mechanism" },
+        { question: "Which aspect of Solana does Raiku's Sidecar improve?", options: ["Transaction speed", "Blockspace trading", "Consensus mechanism", "Data encryption"], answer: "Blockspace trading" },
+        { question: "What is the primary goal of Raiku's advanced scheduling engine?", options: ["To reduce network latency", "To optimize transaction timing", "To increase block size", "To manage user accounts"], answer: "To optimize transaction timing" },
+        { question: "Which protocol layer does Raiku enhance in Solana?", options: ["Application layer", "Networking layer", "Consensus layer", "Storage layer"], answer: "Networking layer" },
+        { question: "How does Raiku support enterprise-grade reliability on Solana?", options: ["By adding more nodes", "By enhancing infrastructure", "By reducing security", "By increasing downtime"], answer: "By enhancing infrastructure" },
+        { question: "What is the key benefit of Raiku's programmable blockspace?", options: ["Faster node validation", "Customizable transaction slots", "Reduced costs", "Increased latency"], answer: "Customizable transaction slots" },
+        { question: "Which component of Raiku manages transaction finality?", options: ["Raiku Sidecar", "Raiku Core Engine", "Firedancer Client", "Agave Marketplace"], answer: "Raiku Core Engine" },
+        { question: "How does Raiku optimize Solana's transaction processing?", options: ["By increasing block intervals", "By placing compute near transactions", "By reducing validator count", "By adding external delays"], answer: "By placing compute near transactions" },
+        { question: "What is the role of the Agave Marketplace in Raiku?", options: ["Handles transaction validation", "Facilitates blockspace trading", "Stores blockchain data", "Manages network security"], answer: "Facilitates blockspace trading" },
+        { question: "Which technology does Raiku use to enhance scalability?", options: ["Cloud computing", "High-performance computing", "Centralized servers", "Legacy systems"], answer: "High-performance computing" },
+        { question: "What is the maximum transaction rate Raiku targets?", options: ["50,000 TPS", "100,000 TPS", "200,000 TPS", "1,000,000 TPS"], answer: "100,000 TPS" },
+        { question: "How does Raiku's infrastructure reduce latency?", options: ["By increasing block size", "By optimizing compute placement", "By slowing network speed", "By adding manual checks"], answer: "By optimizing compute placement" },
+        { question: "Which part of Solana does Raiku's Core Engine enhance?", options: ["Consensus mechanism", "Blockspace allocation", "Data storage", "User interface"], answer: "Blockspace allocation" },
+        { question: "What is the primary function of Raiku's Sidecar?", options: ["To validate transactions", "To enable blockspace sales", "To encrypt data", "To manage nodes"], answer: "To enable blockspace sales" },
+        { question: "How does Raiku improve Solana's network performance?", options: ["By reducing throughput", "By enhancing low-latency", "By increasing downtime", "By limiting features"], answer: "By enhancing low-latency" },
+        { question: "What is the key feature of Raiku's deterministic execution?", options: ["Random outcomes", "Predictable results", "Higher costs", "Increased errors"], answer: "Predictable results" },
+        { question: "Which component of Raiku optimizes transaction scheduling?", options: ["Raiku Sidecar", "Advanced Scheduling Engine", "Firedancer Client", "Agave Marketplace"], answer: "Advanced Scheduling Engine" },
+        { question: "How does Raiku ensure high-frequency transaction support?", options: ["By limiting speed", "By enhancing low-latency", "By increasing delays", "By reducing compute"], answer: "By enhancing low-latency" },
+        { question: "What is the role of high-performance computing in Raiku?", options: ["To store data", "To enhance transaction speed", "To manage validators", "To encrypt transactions"], answer: "To enhance transaction speed" },
+        { question: "Which layer of Solana benefits from Raiku's enhancements?", options: ["Application layer", "Networking layer", "Consensus layer", "Storage layer"], answer: "Networking layer" },
+        { question: "What is the purpose of Raiku's blockspace pre-booking?", options: ["To increase costs", "To guarantee transaction slots", "To reduce speed", "To limit access"], answer: "To guarantee transaction slots" },
+        { question: "How does Raiku's marketplace function?", options: ["Through manual allocation", "Via programmable resources", "By random selection", "Through centralized control"], answer: "Via programmable resources" },
+        { question: "Which technology supports Raiku's reliability improvements?", options: ["Cloud servers", "High-performance computing", "Legacy systems", "Decentralized storage"], answer: "High-performance computing" },
+        { question: "What is the maximum pre-booking time for Raiku's blockspace?", options: ["30 seconds", "60 seconds", "90 seconds", "120 seconds"], answer: "60 seconds" },
+        { question: "How does Raiku enhance Solana's transaction finality?", options: ["By increasing latency", "By optimizing compute", "By reducing nodes", "By adding delays"], answer: "By optimizing compute" },
+        { question: "Which component of Raiku facilitates validator interactions?", options: ["Raiku Core Engine", "Raiku Sidecar", "Firedancer Client", "Agave Marketplace"], answer: "Raiku Sidecar" },
+        { question: "What is the primary benefit of Raiku's network enhancements?", options: ["Increased downtime", "Improved reliability", "Slower transactions", "Higher fees"], answer: "Improved reliability" },
+        { question: "How does Raiku support scalable blockchain solutions?", options: ["By reducing throughput", "By enhancing infrastructure", "By limiting access", "By increasing errors"], answer: "By enhancing infrastructure" },
+        { question: "What is the role of the Firedancer Client in Raiku's system?", options: ["To trade blockspace", "To optimize network performance", "To validate transactions", "To store data"], answer: "To optimize network performance" },
+        { question: "Which aspect of Solana does Raiku's scheduling engine improve?", options: ["Transaction timing", "Data storage", "Network security", "User authentication"], answer: "Transaction timing" },
+        { question: "How does Raiku's Core Engine contribute to Solana?", options: ["By managing nodes", "By optimizing blockspace", "By encrypting data", "By reducing speed"], answer: "By optimizing blockspace" },
+        { question: "What is the key advantage of Raiku's low-latency design?", options: ["Faster transaction processing", "Increased costs", "Reduced security", "Larger blocks"], answer: "Faster transaction processing" },
+        { question: "Which protocol does Raiku use for network consensus?", options: ["Proof of Work", "Tower BFT", "Proof of Stake", "Delegated Proof of Stake"], answer: "Tower BFT" },
+        { question: "How does Raiku's Sidecar enhance blockspace trading?", options: ["By manual allocation", "By enabling direct sales", "By reducing capacity", "By adding delays"], answer: "By enabling direct sales" },
+        { question: "What is the maximum capacity Raiku aims for on Solana?", options: ["50,000 TPS", "100,000 TPS", "250,000 TPS", "500,000 TPS"], answer: "100,000 TPS" },
+        { question: "Which technology does Raiku use to improve transaction throughput?", options: ["Cloud computing", "High-performance computing", "Centralized servers", "Legacy networks"], answer: "High-performance computing" },
+        { question: "How does Raiku's marketplace ensure fairness?", options: ["Through random allocation", "Via a competitive market", "By manual oversight", "Through centralized control"], answer: "Via a competitive market" },
+        { question: "What is the primary role of Raiku's infrastructure enhancements?", options: ["To increase latency", "To enhance reliability", "To reduce throughput", "To limit access"], answer: "To enhance reliability" },
+        { question: "Which component of Raiku optimizes network routing?", options: ["Raiku Sidecar", "Raiku Core Engine", "Firedancer Client", "Agave Marketplace"], answer: "Raiku Core Engine" },
+        { question: "How does Raiku support high-throughput transactions?", options: ["By reducing compute", "By optimizing placement", "By increasing delays", "By limiting nodes"], answer: "By optimizing placement" },
+        { question: "What is the key feature of Raiku's blockspace allocation?", options: ["Random distribution", "Guaranteed slots", "Manual assignment", "Temporary access"], answer: "Guaranteed slots" },
+        { question: "Which technology underpins Raiku's scalability improvements?", options: ["Cloud storage", "High-performance computing", "Decentralized nodes", "Legacy systems"], answer: "High-performance computing" },
+        { question: "How does Raiku enhance Solana's performance metrics?", options: ["By increasing downtime", "By improving latency", "By reducing capacity", "By adding errors"], answer: "By improving latency" },
+        { question: "What is the role of Raiku's Agave Marketplace in blockspace trading?", options: ["To validate transactions", "To facilitate market transactions", "To store data", "To manage nodes"], answer: "To facilitate market transactions" },
+        { question: "How does Raiku optimize Solana's consensus mechanism?", options: ["By reducing node count", "By enhancing Tower BFT", "By increasing latency", "By limiting throughput"], answer: "By enhancing Tower BFT" },
+        { question: "What is the primary function of Raiku's networking layer enhancements?", options: ["To increase costs", "To improve transaction speed", "To reduce security", "To limit access"], answer: "To improve transaction speed" },
+        { question: "Which component of Raiku ensures programmable blockspace?", options: ["Raiku Sidecar", "Raiku Core Engine", "Advanced Scheduling Engine", "Agave Marketplace"], answer: "Agave Marketplace" },
+        { question: "How does Raiku support real-time transaction processing?", options: ["By adding delays", "By enhancing low-latency", "By reducing compute", "By limiting nodes"], answer: "By enhancing low-latency" },
+        { question: "What is the key benefit of Raiku's high-performance computing?", options: ["Increased downtime", "Faster transaction finality", "Higher costs", "Reduced scalability"], answer: "Faster transaction finality" },
+        { question: "Which technology does Raiku use to enhance network routing?", options: ["Cloud servers", "Distributed computing", "Legacy systems", "Quantum networks"], answer: "Distributed computing" },
+        { question: "How does Raiku's infrastructure improve Solana's throughput?", options: ["By reducing speed", "By optimizing compute placement", "By increasing delays", "By limiting access"], answer: "By optimizing compute placement" },
+        { question: "What is the role of Raiku's Firedancer Client in performance?", options: ["To trade blockspace", "To optimize network latency", "To validate transactions", "To store data"], answer: "To optimize network latency" },
+        { question: "Which aspect of Solana does Raiku's Core Engine target?", options: ["Data storage", "Blockspace optimization", "Network security", "User authentication"], answer: "Blockspace optimization" },
+        { question: "How does Raiku ensure efficient blockspace utilization?", options: ["By manual allocation", "Via programmable resources", "By random distribution", "Through centralized control"], answer: "Via programmable resources" },
+        { question: "What is the maximum latency reduction Raiku targets?", options: ["10 ms", "50 ms", "100 ms", "200 ms"], answer: "50 ms" },
+        { question: "Which component of Raiku enhances transaction scalability?", options: ["Raiku Sidecar", "Raiku Core Engine", "Firedancer Client", "Agave Marketplace"], answer: "Raiku Core Engine" },
+        { question: "How does Raiku improve Solana's network efficiency?", options: ["By increasing errors", "By optimizing infrastructure", "By reducing throughput", "By adding delays"], answer: "By optimizing infrastructure" },
+        { question: "What is the key feature of Raiku's transaction scheduling?", options: ["Random timing", "Optimized timing", "Higher costs", "Increased latency"], answer: "Optimized timing" },
+        { question: "Which technology supports Raiku's blockspace pre-booking?", options: ["Cloud computing", "High-performance computing", "Decentralized storage", "Legacy systems"], answer: "High-performance computing" },
+        { question: "How does Raiku enhance Solana's validator performance?", options: ["By reducing capacity", "By improving compute", "By increasing downtime", "By limiting access"], answer: "By improving compute" }
+    ];
 
-        const motivationalQuotes = [
-            "Success is not final, failure is not fatal: It is the courage to continue that counts! 😊🎉 – Winston Churchill",
-            "The only way to do great work is to love what you do! 🌟😄 – Steve Jobs",
-            "Believe you can and you're halfway there! 👍🌈 – Theodore Roosevelt",
-            "Hardships often prepare ordinary people for an extraordinary destiny! 💪✨ – C.S. Lewis",
-            "The best way to predict the future is to create it! 🚀😃 – Peter Drucker",
-            "You are never too old to set another goal or to dream a new dream! 🌺😊 – C.S. Lewis",
-            "It does not matter how slowly you go as long as you do not stop! 🐢🌟 – Confucius",
-            "The future belongs to those who believe in the beauty of their dreams! 🌸😄 – Eleanor Roosevelt",
-            "Happiness is not something ready-made. It comes from your own actions! 😊🌞 – Dalai Lama",
-            "The purpose of our lives is to be happy! 🌼🎈 – Dalai Lama",
-            "Spread love everywhere you go. Let no one ever come to you without leaving happier! 💖😊 – Mother Teresa",
-            "What we think, we become. Be positive and shine bright! 🌟😄 – Buddha",
-            "Joy is the simplest form of gratitude! 🙏😃 – Karl Barth",
-            "Happiness is when what you think, what you say, and what you do are in harmony! 🎶😊 – Mahatma Gandhi",
-            "The greatest happiness you can have is knowing that you do not necessarily require happiness! 🌈😄 – William Saroyan",
-            "A smile is the universal welcome! 😊🌍 – Max Eastman",
-            "Happiness is not a destination, it’s a way of life! 🚗😃 – Unknown",
-            "Find joy in the journey, not just the destination! 🌺😊 – Unknown",
-            "Every day is a new chance to be happy! 🌞🎉 – Unknown",
-            "Laughter is the shortest distance between two people! 😂🤝 – Victor Borge",
-            "Happiness is a warm hug from someone you love! 🤗😊 – Unknown",
-            "Let your smile change the world, but don’t let the world change your smile! 😄🌟 – Unknown",
-            "Chase your dreams with a heart full of joy! 🏃‍♂️😃 – Unknown",
-            "Life is better when you’re laughing! 😂🌈 – Unknown",
-            "Be happy for this moment, this moment is your life! 🌸😊 – Omar Khayyam"
-        ];
+    const motivationalQuotes = [
+        "Success is not final, failure is not fatal: It is the courage to continue that counts!  – Winston Churchill",
+        "The only way to do great work is to love what you do!  – Steve Jobs",
+        "Believe you can and you're halfway there!  – Theodore Roosevelt",
+        "Hardships often prepare ordinary people for an extraordinary destiny!  – C.S. Lewis",
+        "The best way to predict the future is to create it!  – Peter Drucker",
+        "You are never too old to set another goal or to dream a new dream!  – C.S. Lewis",
+        "It does not matter how slowly you go as long as you do not stop!  – Confucius",
+        "The future belongs to those who believe in the beauty of their dreams!  – Eleanor Roosevelt",
+        "Happiness is not something ready-made. It comes from your own actions!  – Dalai Lama",
+        "The purpose of our lives is to be happy!  – Dalai Lama",
+        "Spread love everywhere you go. Let no one ever come to you without leaving happier!  – Mother Teresa",
+        "What we think, we become. Be positive and shine bright!  – Buddha",
+        "Joy is the simplest form of gratitude!  – Karl Barth",
+        "Happiness is when what you think, what you say, and what you do are in harmony!  – Mahatma Gandhi",
+        "The greatest happiness you can have is knowing that you do not necessarily require happiness!  – William Saroyan",
+        "A smile is the universal welcome!  – Max Eastman",
+        "Happiness is not a destination, it’s a way of life!  – Unknown",
+        "Find joy in the journey, not just the destination!  – Unknown",
+        "Every day is a new chance to be happy!  – Unknown",
+        "Laughter is the shortest distance between two people!  – Victor Borge",
+        "Happiness is a warm hug from someone you love!  – Unknown",
+        "Let your smile change the world, but don’t let the world change your smile!  – Unknown",
+        "Chase your dreams with a heart full of joy!  – Unknown",
+        "Life is better when you’re laughing!  – Unknown",
+        "Be happy for this moment, this moment is your life!  – Omar Khayyam"
+    ];
 
-        let currentQuestion = 0;
-        let score = 0;
-        let userAnswers = [];
-        let currentQuizData = [];
-        let timeLeft = 15;
-        let timerInterval;
+    let currentQuestion = 0;
+    let score = 0;
+    let userAnswers = [];
+    let currentQuizData = [];
+    let timeLeft = 15;
+    let timerInterval;
 
-        // Function to shuffle array
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
+    // Function to shuffle array
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
+        return array;
+    }
 
-        function startQuiz() {
-            document.querySelector('.container').style.display = 'none';
-            document.getElementById('motivationalPage').style.display = 'block';
-            document.getElementById('quiz').style.display = 'none';
-            document.getElementById('finalScore').style.display = 'none';
-            const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
-            document.getElementById('motivationalQuote').innerText = randomQuote;
-        }
+    function startQuiz() {
+        document.querySelector('.container').style.display = 'none';
+        document.getElementById('motivationalPage').style.display = 'block';
+        document.getElementById('quiz').style.display = 'none';
+        document.getElementById('finalScore').style.display = 'none';
+        const randomQuote = motivationalQuotes[Math.floor(Math.random() * motivationalQuotes.length)];
+        document.getElementById('motivationalQuote').innerText = randomQuote;
+    }
 
-        function startQuizQuestions() {
-            document.getElementById('motivationalPage').style.display = 'none';
-            document.getElementById('quiz').style.display = 'block';
-            document.getElementById('finalScore').style.display = 'none';
-            currentQuestion = 0;
-            score = 0;
-            userAnswers = [];
-            currentQuizData = quizData.sort(() => Math.random() - 0.5).slice(0, 10); // 10 random questions
-            loadQuestion();
-        }
+    function startQuizQuestions() {
+        document.getElementById('motivationalPage').style.display = 'none';
+        document.getElementById('quiz').style.display = 'block';
+        document.getElementById('finalScore').style.display = 'none';
+        currentQuestion = 0;
+        score = 0;
+        userAnswers = [];
+        currentQuizData = quizData.sort(() => Math.random() - 0.5).slice(0, 10); // 10 random questions
+        loadQuestion();
+    }
 
-        function loadQuestion() {
-            clearInterval(timerInterval); // Clear previous timer
-            timeLeft = 15;
+    function loadQuestion() {
+        clearInterval(timerInterval); // Clear previous timer
+        timeLeft = 15;
+        document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
+        const q = currentQuizData[currentQuestion];
+        document.getElementById('question').innerText = `${currentQuestion + 1}. ${q.question}`;
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = '';
+        let shuffledOptions = shuffleArray([...q.options]);
+        shuffledOptions.forEach((option) => {
+            const div = document.createElement('div');
+            div.className = 'option';
+            div.innerText = option;
+            div.onclick = () => selectOption(div, option);
+            optionsDiv.appendChild(div);
+        });
+        document.getElementById('result').innerText = '';
+        document.getElementById('nextBtn').style.display = 'none';
+
+        // Start timer
+        timerInterval = setInterval(() => {
+            timeLeft--;
             document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
-            const q = currentQuizData[currentQuestion];
-            document.getElementById('question').innerText = `${currentQuestion + 1}. ${q.question}`;
-            const optionsDiv = document.getElementById('options');
-            optionsDiv.innerHTML = '';
-            let shuffledOptions = shuffleArray([...q.options]);
-            shuffledOptions.forEach((option) => {
-                const div = document.createElement('div');
-                div.className = 'option';
-                div.innerText = option;
-                div.onclick = () => selectOption(div, option);
-                optionsDiv.appendChild(div);
-            });
-            document.getElementById('result').innerText = '';
-            document.getElementById('nextBtn').style.display = 'none';
-
-            // Start timer
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    handleTimeout(q);
-                }
-            }, 1000);
-        }
-
-        function selectOption(selectedDiv, selectedOption) {
-            clearInterval(timerInterval); // Stop timer on selection
-            document.querySelectorAll('.option').forEach(opt => {
-                opt.classList.add('disabled');
-                opt.onclick = null;
-            });
-            selectedDiv.classList.add('selected');
-            const q = currentQuizData[currentQuestion];
-            if (selectedOption === q.answer) {
-                score++;
-                selectedDiv.classList.add('correct');
-                document.getElementById('result').innerText = 'Correct! ✅';
-                document.getElementById('result').style.color = '#4CAF50';
-            } else {
-                selectedDiv.classList.add('wrong');
-                document.getElementById('result').innerText = 'Wrong! ❌';
-                document.getElementById('result').style.color = '#f44336';
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                handleTimeout(q);
             }
-            userAnswers[currentQuestion] = selectedOption;
-            document.getElementById('nextBtn').style.display = 'block';
-        }
+        }, 1000);
+    }
 
-        function handleTimeout(q) {
-            document.querySelectorAll('.option').forEach(opt => {
-                opt.classList.add('disabled');
-                opt.onclick = null;
-            });
-            userAnswers[currentQuestion] = "Not Attempted";
-            document.getElementById('result').innerText = 'Time Out! Not Attempted';
-            document.getElementById('result').style.color = '#757575';
-            document.getElementById('nextBtn').style.display = 'block';
+    function selectOption(selectedDiv, selectedOption) {
+        clearInterval(timerInterval); // Stop timer on selection
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.classList.add('disabled');
+            opt.onclick = null;
+        });
+        selectedDiv.classList.add('selected');
+        const q = currentQuizData[currentQuestion];
+        if (selectedOption === q.answer) {
+            score++;
+            selectedDiv.classList.add('correct');
+            document.getElementById('result').innerText = 'Correct! ';
+            document.getElementById('result').style.color = '#4CAF50';
+        } else {
+            selectedDiv.classList.add('wrong');
+            document.getElementById('result').innerText = 'Wrong! ';
+            document.getElementById('result').style.color = '#f44336';
         }
+        userAnswers[currentQuestion] = selectedOption;
+        document.getElementById('nextBtn').style.display = 'block';
+    }
 
-        function nextQuestion() {
-            currentQuestion++;
-            if (currentQuestion < currentQuizData.length) {
-                loadQuestion();
+    function handleTimeout(q) {
+        document.querySelectorAll('.option').forEach(opt => {
+            opt.classList.add('disabled');
+            opt.onclick = null;
+        });
+        userAnswers[currentQuestion] = "Not Attempted";
+        document.getElementById('result').innerText = 'Time Out! Not Attempted';
+        document.getElementById('result').style.color = '#757575';
+        document.getElementById('nextBtn').style.display = 'block';
+    }
+
+    function nextQuestion() {
+        currentQuestion++;
+        if (currentQuestion < currentQuizData.length) {
+            loadQuestion();
+        } else {
+            showFinalScore();
+        }
+    }
+
+    function showFinalScore() {
+        clearInterval(timerInterval); // Clear timer on quiz end
+        document.getElementById('quiz').style.display = 'none';
+        document.getElementById('finalScore').style.display = 'block';
+        document.getElementById('scoreDisplay').innerText = score;
+        let reviewHtml = '<h3>Questions and Results:</h3><ul>';
+        currentQuizData.forEach((q, index) => {
+            reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span>`;
+            reviewHtml += `
+<span class="correct-answer-label">Correct Answer: </span><span class="correct-answer">${q.answer}</span>`;
+            if (userAnswers[index] !== "Not Attempted") {
+                reviewHtml += `
+<span class="your-answer-label">Your Answer: </span><span class="your-answer${userAnswers[index] === q.answer ? ' correct' : ''}">${userAnswers[index]}</span>`;
             } else {
-                showFinalScore();
+                reviewHtml += `
+<span class="your-answer-label">Your Answer: </span><span class="your-answer">Not Attempted</span>`;
             }
-        }
+            reviewHtml += ` <span class="tick ${userAnswers[index] === q.answer ? 'green-tick' : userAnswers[index] !== "Not Attempted" ? 'red-cross' : ''}">${userAnswers[index] === q.answer ? '' : userAnswers[index] !== "Not Attempted" ? '' : ''}</span></li>`;
+        });
+        reviewHtml += '</ul>';
+        document.getElementById('answersReview').innerHTML = reviewHtml;
+    }
 
-        function showFinalScore() {
-            clearInterval(timerInterval); // Clear timer on quiz end
-            document.getElementById('quiz').style.display = 'none';
-            document.getElementById('finalScore').style.display = 'block';
-            document.getElementById('scoreDisplay').innerText = score;
-            let reviewHtml = '<h3>Questions and Results:</h3><ul>';
-            currentQuizData.forEach((q, index) => {
-                reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span>`;
-                reviewHtml += `<br><span class="correct-answer-label">Correct Answer: </span><span class="correct-answer">${q.answer}</span>`;
-                if (userAnswers[index] !== "Not Attempted") {
-                    reviewHtml += `<br><span class="your-answer-label">Your Answer: </span><span class="your-answer${userAnswers[index] === q.answer ? ' correct' : ''}">${userAnswers[index]}</span>`;
-                } else {
-                    reviewHtml += `<br><span class="your-answer-label">Your Answer: </span><span class="your-answer">Not Attempted</span>`;
-                }
-                reviewHtml += ` <span class="tick ${userAnswers[index] === q.answer ? 'green-tick' : userAnswers[index] !== "Not Attempted" ? 'red-cross' : ''}">${userAnswers[index] === q.answer ? '✅' : userAnswers[index] !== "Not Attempted" ? '❌' : ''}</span></li>`;
-            });
-            reviewHtml += '</ul>';
-            document.getElementById('answersReview').innerHTML = reviewHtml;
-        }
-
-        function restartQuiz() {
-            document.getElementById('finalScore').style.display = 'none';
-            document.querySelector('.container').style.display = 'block';
-            currentQuestion = 0;
-            score = 0;
-            userAnswers = [];
-        }
-    </script>
-</body>
+    function restartQuiz() {
+        document.getElementById('finalScore').style.display = 'none';
+        document.querySelector('.container').style.display = 'block';
+        currentQuestion = 0;
+        score = 0;
+        userAnswers = [];
+    }
+</script></body>
 </html>
+
