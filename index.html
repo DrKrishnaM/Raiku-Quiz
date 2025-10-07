@@ -79,12 +79,6 @@
         #quiz {
             display: none;
         }
-        #timer {
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #000;
-            margin-bottom: 10px;
-        }
         #question {
             font-size: 1.2em;
             margin-bottom: 20px;
@@ -104,21 +98,13 @@
             background-color: #e6f3ff;
         }
         .option.selected {
+            background-color: white !important;
             border-color: #4CAF50;
-        }
-        .option.correct {
-            background-color: #4CAF50;
-            color: white;
-            border-color: #4CAF50;
-        }
-        .option.wrong {
-            background-color: #f44336;
-            color: white;
-            border-color: #f44336;
+            cursor: not-allowed; /* Disable cursor change after selection */
         }
         .option.disabled {
-            pointer-events: none;
-            opacity: 0.6;
+            pointer-events: none; /* Disable further clicks */
+            opacity: 0.6; /* Visual cue for disabled state */
         }
         #nextBtn {
             background-color: #2196F3;
@@ -215,7 +201,6 @@
     </div>
 
     <div id="quiz" class="container">
-        <div id="timer">Time Left: 15s</div>
         <h2 id="question"></h2>
         <div id="options"></div>
         <div id="result"></div>
@@ -361,8 +346,6 @@
         let score = 0;
         let userAnswers = [];
         let currentQuizData = [];
-        let timeLeft = 15;
-        let timerInterval;
 
         // Function to shuffle array
         function shuffleArray(array) {
@@ -394,14 +377,11 @@
         }
 
         function loadQuestion() {
-            clearInterval(timerInterval); // Clear previous timer
-            timeLeft = 15;
-            document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
             const q = currentQuizData[currentQuestion];
             document.getElementById('question').innerText = `${currentQuestion + 1}. ${q.question}`;
             const optionsDiv = document.getElementById('options');
             optionsDiv.innerHTML = '';
-            let shuffledOptions = shuffleArray([...q.options]);
+            let shuffledOptions = shuffleArray([...q.options]); // Shuffle options randomly
             shuffledOptions.forEach((option) => {
                 const div = document.createElement('div');
                 div.className = 'option';
@@ -411,48 +391,25 @@
             });
             document.getElementById('result').innerText = '';
             document.getElementById('nextBtn').style.display = 'none';
-
-            // Start timer
-            timerInterval = setInterval(() => {
-                timeLeft--;
-                document.getElementById('timer').innerText = `Time Left: ${timeLeft}s`;
-                if (timeLeft <= 0) {
-                    clearInterval(timerInterval);
-                    handleTimeout(q);
-                }
-            }, 1000);
         }
 
         function selectOption(selectedDiv, selectedOption) {
-            clearInterval(timerInterval); // Stop timer on selection
+            // Disable all options after selection
             document.querySelectorAll('.option').forEach(opt => {
                 opt.classList.add('disabled');
-                opt.onclick = null;
+                opt.onclick = null; // Remove click event
             });
             selectedDiv.classList.add('selected');
             const q = currentQuizData[currentQuestion];
             if (selectedOption === q.answer) {
                 score++;
-                selectedDiv.classList.add('correct');
                 document.getElementById('result').innerText = 'Correct! ✅';
                 document.getElementById('result').style.color = '#4CAF50';
             } else {
-                selectedDiv.classList.add('wrong');
                 document.getElementById('result').innerText = 'Wrong! ❌';
                 document.getElementById('result').style.color = '#f44336';
             }
             userAnswers[currentQuestion] = selectedOption;
-            document.getElementById('nextBtn').style.display = 'block';
-        }
-
-        function handleTimeout(q) {
-            document.querySelectorAll('.option').forEach(opt => {
-                opt.classList.add('disabled');
-                opt.onclick = null;
-            });
-            userAnswers[currentQuestion] = "Not Attempted";
-            document.getElementById('result').innerText = 'Time Out! Not Attempted';
-            document.getElementById('result').style.color = '#757575';
             document.getElementById('nextBtn').style.display = 'block';
         }
 
@@ -466,21 +423,12 @@
         }
 
         function showFinalScore() {
-            clearInterval(timerInterval); // Clear timer on quiz end
             document.getElementById('quiz').style.display = 'none';
             document.getElementById('finalScore').style.display = 'block';
             document.getElementById('scoreDisplay').innerText = score;
-            let reviewHtml = '<h3>Questions and Results:</h3><ul>';
+            let reviewHtml = '<h3>Questions and Correct Answers:</h3><ul>';
             currentQuizData.forEach((q, index) => {
-                reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span><br>`;
-                if (userAnswers[index] === q.answer) {
-                    reviewHtml += '<span style="color: #4CAF50;">Correct Answer: ' + q.answer + '</span><br>';
-                } else if (userAnswers[index] === "Not Attempted") {
-                    reviewHtml += '<span style="color: #757575;">Not Attempted - Correct Answer: ' + q.answer + '</span><br>';
-                } else {
-                    reviewHtml += '<span style="color: #f44336;">Wrong (Your Answer: ' + userAnswers[index] + ') - Correct Answer: ' + q.answer + '</span><br>';
-                }
-                reviewHtml += '</li>';
+                reviewHtml += `<li><span class="question-text">Q${index + 1}: ${q.question}</span><br>Correct Answer: <span class="correct-answer">${q.answer}</span><br></li>`;
             });
             reviewHtml += '</ul>';
             document.getElementById('answersReview').innerHTML = reviewHtml;
