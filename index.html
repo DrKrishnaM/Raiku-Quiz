@@ -140,7 +140,6 @@
             margin-top: 20px;
             font-weight: bold;
             font-size: 18px;
-            display: none; /* Hide result text */
         }
         #finalScore {
             display: none;
@@ -461,8 +460,12 @@
             if (selectedOption === q.answer) {
                 score++;
                 selectedDiv.classList.add('correct');
+                document.getElementById('result').innerText = 'Correct! ✅';
+                document.getElementById('result').style.color = '#4CAF50';
             } else {
                 selectedDiv.classList.add('wrong');
+                document.getElementById('result').innerText = 'Wrong! ❌';
+                document.getElementById('result').style.color = '#f44336';
             }
             userAnswers[currentQuestion] = selectedOption;
             document.getElementById('nextBtn').style.display = 'block';
@@ -474,6 +477,8 @@
                 opt.onclick = null;
             });
             userAnswers[currentQuestion] = "Not Attempted";
+            document.getElementById('result').innerText = 'Time Out! Not Attempted';
+            document.getElementById('result').style.color = '#757575';
             document.getElementById('nextBtn').style.display = 'block';
         }
 
